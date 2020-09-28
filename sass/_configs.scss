@@ -1,0 +1,127 @@
+body.config {
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    
+    form {
+        width: 100%;
+        padding: .5em 1em;
+        box-sizing: border-box;
+
+        &.cols {
+            display: flex;
+            > div { 
+                flex: 1;
+                &:first-child {
+                    margin-right: .8em;
+                }
+             }
+        }
+
+        div { 
+            margin: 0 0 .8em; 
+
+            &.colas {
+                max-height: 450px;
+                overflow-y: auto;
+
+                .cola {
+                    display: flex;
+                    align-items: center;
+
+                    input[type="text"], input[type="num"] {
+                        width: 60%;
+                    }
+
+                    input[type="color"] {
+                        margin-left: 1em;
+                    }
+                }
+            }
+        }
+
+        #canvasLogo { 
+            width: 300px;
+            height: 56px;
+            background: url("alpha.png") repeat
+        }
+    }
+
+    button {
+        padding: .4em 1.5em;
+        border: 2px solid darken(white, 20%);
+        background-color: darken(white, 20%);
+
+        &:hover {
+            border-color: darken(white, 40%);
+        }
+
+        &:active {
+            border-color: darken(white, 40%);
+            background-color: darken(white, 40%);
+        }
+    }
+
+    fieldset {
+        margin-bottom: 1em;
+    }
+
+    select { overflow: auto; }
+
+    input[type="text"], input[type="num"], select {
+        border: 2px solid darken(white, 30%);
+        padding: .4em;
+        margin: .6em 0;
+        width: 90%; 
+        display: block;
+
+        &:hover { border-color: darken(white, 50%); }
+
+        &:focus { border-color: $main-color; }
+    }
+    
+
+    input[type="checkbox"] { display: none; }
+
+
+    input[type="checkbox"] + label::before {
+        content: '';
+        display: inline-block;
+        width: 19px;
+        height: 19px;
+        border: 2px solid darken(white, 30%);
+        margin-right: 1em;
+        position: relative;
+        top: 0.2em;
+    }
+
+    input[type="checkbox"]:not(:disabled):hover + label::before { border-color: black; }
+    input[type="checkbox"]:not(:disabled):active + label::before { 
+        background-color: darken(white, 40%);
+        border-color: darken(white, 40%);
+    }
+
+    input[type="checkbox"]:checked + label::before {
+        background-color: $main-color;
+        border-color: $main-color; 
+    }
+
+
+    input:disabled { 
+        background-color: lightgrey;
+
+        & + label::before { background-color: lightgrey !important; } /* Para los checkbox */
+     }
+
+     
+
+     div.coord { /* Coordenadas de ventanas */
+        input[type="num"], input[type="text"] { 
+            width: 35%;
+            display: inline-block;
+         }
+    }
+}

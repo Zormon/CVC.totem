@@ -1,0 +1,78 @@
+body {
+    &.ncolas-1 { 
+        #tickets {
+            > div { grid-column: span 12; }
+        }
+    }
+    &.ncolas-2,  &.ncolas-4 { 
+        #tickets {
+            > div { grid-column: span 6; }
+        }
+    }
+    &.ncolas-3, &.ncolas-6 { 
+        #tickets {
+            > div { grid-column: span 4; }
+        }
+    }
+    &.ncolas-5 { 
+        #tickets {
+            > div {
+                &:nth-child(-n+3) { grid-column: span 4; }
+                &:nth-child(n+4) { grid-column: span 6; }
+            }
+        }
+     }
+
+     &.ncolas-1, &.ncolas-2, &.ncolas-3 {
+         #tickets {
+            .turno { font-size: 6vw; }
+            .nombre { margin-top: 14vw; }
+            .num { margin-bottom: 14vw; }
+         }
+     }
+
+     &.ncolas-4, &.ncolas-5, &.ncolas-6 {
+         #tickets {
+            .nombre { margin-top: 3vw; }
+            .turno { font-size: 4vw; }
+         }
+     }
+}
+
+#tickets {
+    text-align: center;
+    z-index: 3;
+    align-items: center;
+    background: white;
+    padding: 0;
+    font-family: 'Num';
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+}
+
+
+#tickets {
+    div { 
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+
+        .num {
+            display: block;
+            color: white;
+            font-size: 24vw;
+            line-height: 100%;
+        }
+    
+        .nombre {
+            color: white;
+            font-size: 6.5vw;
+            line-height: 7vw;
+        }
+
+        .turno {
+            background-color: white;
+        }
+     }
+}

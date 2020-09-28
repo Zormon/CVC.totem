@@ -1,0 +1,31 @@
+body {
+    &.vertical {
+        #info {
+            display: flex;
+            align-items: center;
+            background: white;
+
+            > * {
+                padding: 0 2vw;
+                overflow: hidden;
+            }
+
+            > *:nth-child(1) { // Time
+                flex: 1;
+                font-size: 7vw;
+                color: var(--secondary-color);
+                font-family: 'font';
+                line-height: 1em;
+            }
+            > *:nth-child(2) { // iconos sociales
+                flex: 2;
+                width: 20vw; 
+            }
+            > *:nth-child(3) { // Logo Spar
+                flex: 2;
+                width: 20vw;
+
+            }
+        }
+    }
+}
