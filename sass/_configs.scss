@@ -11,9 +11,9 @@ body.config {
         padding: .5em 1em;
         box-sizing: border-box;
 
-        &.cols {
+        &.flex {
             display: flex;
-            > div { 
+            div.col { 
                 flex: 1;
                 &:first-child {
                     margin-right: .8em;
@@ -43,25 +43,31 @@ body.config {
             }
         }
 
+        #canvasLogo, #canvasBarImg { background: url("alpha.png") repeat }
+
         #canvasLogo { 
-            width: 300px;
-            height: 56px;
-            background: url("alpha.png") repeat
+            width: 240px;
+            height: 60px;
+        }
+
+        #canvasBarImg { 
+            width: 240px;
+            height: 43px;
         }
     }
 
     button {
         padding: .4em 1.5em;
-        border: 2px solid darken(white, 20%);
-        background-color: darken(white, 20%);
+        border: 2px solid darken($light-color, 20%);
+        background-color: darken($light-color, 20%);
 
         &:hover {
-            border-color: darken(white, 40%);
+            border-color: darken($light-color, 40%);
         }
 
         &:active {
-            border-color: darken(white, 40%);
-            background-color: darken(white, 40%);
+            border-color: darken($light-color, 40%);
+            background-color: darken($light-color, 40%);
         }
     }
 
@@ -72,13 +78,13 @@ body.config {
     select { overflow: auto; }
 
     input[type="text"], input[type="num"], select {
-        border: 2px solid darken(white, 30%);
+        border: 2px solid darken($light-color, 30%);
         padding: .4em;
         margin: .6em 0;
         width: 90%; 
         display: block;
 
-        &:hover { border-color: darken(white, 50%); }
+        &:hover { border-color: darken($light-color, 50%); }
 
         &:focus { border-color: $main-color; }
     }
@@ -92,16 +98,16 @@ body.config {
         display: inline-block;
         width: 19px;
         height: 19px;
-        border: 2px solid darken(white, 30%);
+        border: 2px solid darken($light-color, 30%);
         margin-right: 1em;
         position: relative;
         top: 0.2em;
     }
 
-    input[type="checkbox"]:not(:disabled):hover + label::before { border-color: black; }
+    input[type="checkbox"]:not(:disabled):hover + label::before { border-color: $dark-color; }
     input[type="checkbox"]:not(:disabled):active + label::before { 
-        background-color: darken(white, 40%);
-        border-color: darken(white, 40%);
+        background-color: darken($light-color, 40%);
+        border-color: darken($light-color, 40%);
     }
 
     input[type="checkbox"]:checked + label::before {

@@ -1,8 +1,8 @@
 {
-  "name": "spartotem",
-  "productName": "spartotem",
-  "version": "4.1.0",
-  "description": "Totem Spar",
+  "name": "totem",
+  "productName": "totem",
+  "version": "4.2.0",
+  "description": "Totem CVC",
   "main": "src/main.js",
   "scripts": {
     "start": "electron-forge start",

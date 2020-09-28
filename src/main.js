@@ -1,4 +1,4 @@
-const appName = 'spartotem'
+const appName = 'totem'
 const { app, BrowserWindow, Menu, ipcMain, dialog } = require('electron')
 const fs = require("fs")
 const path = require('path')
@@ -90,7 +90,7 @@ var appWin; var configWin; var configServerWin; var configUIWin;
       role: 'help',
       label: 'Ayuda',
       submenu: [
-          {role: 'about', label:'Información',     click() { about() } },
+          {label:'Información',     click() { about() } },
           {role: 'toggledevtools', label:'Consola Web'}
       ]
   }
@@ -177,6 +177,8 @@ var appWin; var configWin; var configServerWin; var configUIWin;
     }
 
     appWin.loadFile(`${__dirname}/_main/${tpl}.html`)
+    appWin.setTitle(appName)
+    appWin.on('page-title-updated', (e)=>{ e.preventDefault()})
     Menu.setApplicationMenu( Menu.buildFromTemplate(menu) )
     appWin.show()
     appWin.on('closed', () => { logs.log('MAIN','QUIT',''); app.quit() })
@@ -186,7 +188,7 @@ var appWin; var configWin; var configServerWin; var configUIWin;
   }
 
   function config() {
-    configWin = new BrowserWindow({width: 720, height: 420, show:false, alwaysOnTop: true, webPreferences: { enableRemoteModule: true, nodeIntegration: true, parent: appWin }})
+    configWin = new BrowserWindow({width: 720, height: 340, show:false, alwaysOnTop: true, webPreferences: { enableRemoteModule: true, nodeIntegration: true, parent: appWin }})
     configWin.loadFile(`${__dirname}/_config/config.html`)
     configWin.setMenu( null )
     configWin.resizable = false
@@ -198,7 +200,7 @@ var appWin; var configWin; var configServerWin; var configUIWin;
 
     // Ventana de personalizacion de interfaz
     function configUI() {
-      configUIWin = new BrowserWindow({width: 350, height: 540, show:false, alwaysOnTop: true, resizable: false, webPreferences: { enableRemoteModule: true, nodeIntegration: true, parent: appWin }})
+      configUIWin = new BrowserWindow({width: 700, height: 460, show:false, alwaysOnTop: true, resizable: false, webPreferences: { enableRemoteModule: true, nodeIntegration: true, parent: appWin }})
       configUIWin.loadFile(`${__dirname}/_configUI/configUI.html`)
       configUIWin.setMenu( null )
       configUIWin.show()
@@ -248,6 +250,20 @@ ipcMain.on('saveInterface', (e, arg) => {
   global.interface = arg
   savePrefs(arg, CONFIGUI_FILE)
   logs.log('MAIN', 'SAVE_INTERFACE', JSON.stringify(arg))
+
+  //Logo cliente
+  if (arg.logo) {
+    const path = app.getAppPath() + '/files/'
+    const file = Buffer.from(arg.logo.file, 'base64');
+    fs.writeFileSync(path + arg.logo.name, file)
+  }
+
+  //Imagen de barra
+  if (arg.barImg) {
+    const path = app.getAppPath() + '/files/'
+    const file = Buffer.from(arg.barImg.file, 'base64');
+    fs.writeFileSync(path + arg.barImg.name, file)
+  }
   restart()
 })
 

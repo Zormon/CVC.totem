@@ -2,55 +2,69 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Interfaz - Totem Spar</title>
+    <title>Interfaz</title>
     <script src="../_configUI/configUI.js" defer></script>
     <link rel="stylesheet" href="../res/config.css">
   </head>
   <body class="config">
-      <form id="configUI">
-        <fieldset id="interfaz">
-          <legend>Interfaz</legend>
-          <div>
-            <label for="type">Tipo de interfaz</label>
-            <select id="type">
-              <option value="0">Vertical</option>
-              <option value="1">Horizontal</option>
-            </select>
-          </div>
-          <div>
-            <label for="exColas">Excluir colas</label>
-            <select id="exColas" size="6" multiple>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-            </select>
-          </div>
-        </fieldset>
-
-        <fieldset id="custom">
-          <legend>Personalizacion</legend>
-          <div>
-            <label for="mainColor">Color principal</label>
-            <input type="color" id="mainColor">
-          </div>
-          <div>
-            <label for="lightColor">Color secundario</label>
-            <input type="color" id="secondaryColor">
-          </div>
-
+      <form id="configUI" class="flex">
+        <div class="col">
+          <fieldset id="interfaz">
+            <legend>Interfaz</legend>
+            <div>
+              <label for="type">Tipo de interfaz</label>
+              <select id="type">
+                <option value="0">Vertical</option>
+                <option value="1">Horizontal</option>
+              </select>
+            </div>
+            <div>
+              <label for="exColas">Excluir colas</label>
+              <select id="exColas" size="6" multiple>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+              </select>
+            </div>
+          </fieldset>
+  
           <div>
             <input type="checkbox" id="info">
             <label for="info">Barra informativa</label>
           </div>
-        </fieldset>
+        </div>
 
-        
-        <button id="save">Aplicar</button>
-        <button id="default">Por defecto</button>
+        <div class="col">
+          <fieldset id="custom">
+            <legend>Personalizacion</legend>
+            <div>
+              <label for="mainColor">Color principal</label>
+              <input type="color" id="mainColor">
+            </div>
+            <div>
+              <label for="lightColor">Color secundario</label>
+              <input type="color" id="secondaryColor">
+            </div>
+
+            <div>
+              <label for="footerLogo">Logo cliente (1000px x 250px)</label>
+              <input type="file" id="footerLogo" accept="image/png">
+            </div>
+            <div><canvas id="canvasLogo"></canvas></div>
+
+            <div>
+              <label for="barImg">Imagen de barra (1000px x 180px)</label>
+              <input type="file" id="barImg" accept="image/png">
+            </div>
+            <div><canvas id="canvasBarImg"></canvas></div>
+          </fieldset>
+
+          <button id="save">Aplicar</button>
+          <button id="default">Por defecto</button>
+        </div>
       </form>
-
   </body>
 </html>
