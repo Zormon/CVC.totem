@@ -188,7 +188,7 @@ var appWin; var configWin; var configServerWin; var configUIWin;
   }
 
   function config() {
-    configWin = new BrowserWindow({width: 720, height: 340, show:false, alwaysOnTop: true, webPreferences: { enableRemoteModule: true, nodeIntegration: true, parent: appWin }})
+    configWin = new BrowserWindow({width: 720, height: 440, show:false, alwaysOnTop: true, webPreferences: { enableRemoteModule: true, nodeIntegration: true, parent: appWin }})
     configWin.loadFile(`${__dirname}/_config/config.html`)
     configWin.setMenu( null )
     configWin.resizable = false
@@ -210,13 +210,13 @@ var appWin; var configWin; var configServerWin; var configUIWin;
     }
 
   function configServer() {
-    configWin = new BrowserWindow({width: 400, height: 550, show:false, alwaysOnTop: true, resizable: false, webPreferences: { enableRemoteModule: true, nodeIntegration: true, parent: appWin }})
-    configWin.loadFile(`${__dirname}/_configServer/configServer.html`)
-    configWin.setMenu( null )
-    configWin.show()
+    configServerWin = new BrowserWindow({width: 400, height: 550, show:false, alwaysOnTop: true, resizable: false, webPreferences: { enableRemoteModule: true, nodeIntegration: true, parent: appWin }})
+    configServerWin.loadFile(`${__dirname}/_configServer/configServer.html`)
+    configServerWin.setMenu( null )
+    configServerWin.show()
     
-    configWin.on('closed', () => { configWin = null })
-    //configWin.webContents.openDevTools()
+    configServerWin.on('closed', () => { configServerWin = null })
+    //configServerWin.webContents.openDevTools()
   }
 
   function about() {
@@ -243,6 +243,13 @@ ipcMain.on('savePrefs', (e, arg) => {
   global.appConf = arg
   savePrefs(arg, CONFIG_FILE)
   logs.log('MAIN', 'SAVE_PREFS', JSON.stringify(arg))
+
+  //Logo cliente
+  if (arg.printLogo) {
+    const path = app.getAppPath() + '/files/'
+    const file = Buffer.from(arg.printLogo.file, 'base64');
+    fs.writeFileSync(path + arg.printLogo.name, file)
+  }
   restart()
 })
 

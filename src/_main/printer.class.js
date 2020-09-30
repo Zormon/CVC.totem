@@ -16,13 +16,13 @@ class Printer {
 
     init () {
         var _this = this
-        //setInterval(()=> { _this.check()}, 3000)
+        setInterval(()=> { _this.check()}, 3000)
     }
 
     async printTicket(cola, numero) {
         modalBox('printing', 'print', `Imprimiendo ticket ${numero} para ${cola}`, 'Recoja su ticket debajo')
         this.ipc.send('log', {origin: 'PRINT', event: 'TICKET', message: `Imprimiendo ticket ${numero} de cola ${cola}`})
-        /*
+        
         let canvas = document.createElement('canvas'); canvas.className = 'ticket'
         let ctx = canvas.getContext("2d")
         canvas.width = 512; canvas.height = 280
@@ -43,7 +43,7 @@ class Printer {
 
         //document.body.appendChild(canvas)
         navigator.sendBeacon(this.url, new Blob([printData], {type:'text/plain'}))
-        */
+        
         await sleep(5000)
         modalBox('printing', false)
     }

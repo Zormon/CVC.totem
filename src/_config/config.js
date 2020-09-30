@@ -5,7 +5,6 @@ function $$$(id)    { return document.querySelectorAll(id)  }
 const remote = require('electron').remote
 const { ipcRenderer } = require('electron')
 var prefs = remote.getGlobal('appConf')
-var interface = remote.getGlobal('interface')
 
 function savePreferences() {
     prefs.contentDir = $('contentDir').value
@@ -22,7 +21,33 @@ function savePreferences() {
     prefs.window.posX = parseInt( $('windowPosX').value != ''? $('windowPosX').value : $('windowPosX').placeholder )
     prefs.window.posY = parseInt( $('windowPosY').value != ''? $('windowPosY').value : $('windowPosY').placeholder )
 
+    // Imagen de logo
+    if (typeof $('printFooter').files[0] != 'undefined') {
+        prefs.printLogo = {name: 'printFooter.png', file: $('canvasFooter').toDataURL("image/png").substring(22)}
+    }
+
     ipcRenderer.send('savePrefs', prefs )
+}
+
+function canvasThumb(event, canvas, width, height) {
+    canvas.width = width
+    canvas.height = height
+    canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
+    var img = document.createElement('img')
+    img.src = URL.createObjectURL( event.files[0] )
+
+    img.onload = ()=> {
+        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height )
+    }
+}
+
+function clearCanvas(canvas) {
+    canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
+}
+
+$('printFooter').onchange = (e) => { 
+    if (typeof e.currentTarget.files[0] != 'undefined')     { canvasThumb(e.currentTarget, $('canvasFooter'), 240, 60) } 
+    else                                                    { clearCanvas($('canvasFooter')) }
 }
 
 $('save').onclick = (e)=> {
