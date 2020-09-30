@@ -80,10 +80,14 @@ class Printer {
                     }
                     modalBox('printError', 'error', 'ERROR DE IMPRESORA', errorText)
                 }
-            }).finally(()=>{ this.fetching = false })
+            }).catch((e)=> {
+                modalBox('printError', 'error', 'ERROR DE RED', 'No se puede acceder a la red')
+                this.ipc.send('logError', {origin: 'NETWORK', error: 'NETWORK_UNREACHABLE', message: e.message})
+             })
+            .finally(()=>{ this.fetching = false })
         } else {
             modalBox('printError', 'error', 'ERROR DE IMPRESORA', 'La impresora no responde')
-            this.ipc.send('logError', {origin: 'PRINT', error: 'OFFLINE', message: 'La impresora no responde'})
+            this.ipc.send('logError', {origin: 'PRINT', error: 'OFFLINE', message: `${this.ip}:${this.port}`})
         }
       }
 

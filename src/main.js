@@ -184,7 +184,7 @@ var appWin; var configWin; var configServerWin; var configUIWin;
     appWin.on('closed', () => { logs.log('MAIN','QUIT',''); app.quit() })
 
     logs.log('MAIN','START','')
-    //appWin.webContents.openDevTools()
+    appWin.webContents.openDevTools()
   }
 
   function config() {
