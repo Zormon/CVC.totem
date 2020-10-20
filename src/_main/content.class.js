@@ -88,7 +88,7 @@ class Content {
     async updatePlaylist() {
         return fetch(`file://${this.dir}/lista.xml`).then(r => r.text()).then(s => new window.DOMParser().parseFromString(s, "text/xml")).then((xml) => {
             let nodes = xml.getElementsByTagName('contenido')
-            let tienda = xml.getElementsByTagName('contenidos')[0].getAttribute('tienda')
+            let equipo = xml.getElementsByTagName('contenidos')[0].getAttribute('equipo')
             this.contenidos = new Array()
             const now = Date.now()
             for (let i=0; i< nodes.length; i++) {
@@ -104,7 +104,7 @@ class Content {
                 }
             }
 
-            this.ipc.send('log', {origin: 'MEDIA', event: 'UPDATE_PLAYLIST', message: `Tienda: ${tienda}, Contenidos: ${nodes.length}`})
+            this.ipc.send('log', {origin: 'MEDIA', event: 'UPDATE_PLAYLIST', message: `Equipo: ${equipo}, Contenidos: ${nodes.length}`})
         })
       }
 }
