@@ -90,12 +90,13 @@ class Content {
             let nodes = xml.getElementsByTagName('contenido')
             let equipo = xml.getElementsByTagName('contenidos')[0].getAttribute('equipo')
             this.contenidos = new Array()
-            const now = Date.now()
+            let now = new Date; now.setUTCHours(0,0,0,0); now = now.getTime()
+
             for (let i=0; i< nodes.length; i++) {
                 const desde = Date.parse( nodes[i].getElementsByTagName('desde')[0].textContent )
                 const hasta = Date.parse( nodes[i].getElementsByTagName('hasta')[0].textContent )
 
-                if ( desde < now && hasta > now ) {
+                if ( desde <= now && hasta >= now ) {
                     this.contenidos.push( {
                         'nombre': nodes[i].getElementsByTagName('nombre')[0].textContent,
                         'fichero': nodes[i].getElementsByTagName('fichero')[0].textContent,
