@@ -17,15 +17,15 @@ function saveConfigUI() {
 
     interface.exColas = Array.from( $('exColas').selectedOptions ).map(el => parseInt(el.value))
 
-        // Imagen de logo
-        if (typeof $('footerLogo').files[0] != 'undefined') {
-            interface.logo = {name: 'logoCliente.png', file: $('canvasLogo').toDataURL("image/png").substring(22)}
-        }
-    
-        // Imagen de barra
-        if (typeof $('barImg').files[0] != 'undefined') {
-            interface.barImg = {name: 'barImage.png', file: $('canvasBarImg').toDataURL("image/png").substring(22)}
-        }
+    // Imagen de logo
+    if (typeof $('footerLogo').files[0] != 'undefined') {
+        interface.logo = {name: 'logoCliente.png', file: $('canvasLogo').toDataURL("image/png").substring(22)}
+    }
+
+    // Imagen de barra
+    if (typeof $('barImg').files[0] != 'undefined') {
+        interface.barImg = {name: 'barImage.png', file: $('canvasBarImg').toDataURL("image/png").substring(22)}
+    }
 
     ipcRenderer.send('saveInterface', interface )
 }

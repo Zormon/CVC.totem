@@ -88,8 +88,9 @@ body.main {
     
         &.horizontal {
             grid-template:
+                "head  media"  1fr
                 "tickets  media"  9fr
-                "tickets  info"   1fr
+                "tickets  info"   2fr
                 / 1fr   1fr
             ;
         }

@@ -2,7 +2,8 @@ function $$(id)     { return document.querySelector(id)     }
 function sleep(ms) { return new Promise(resolve=>setTimeout(resolve,ms));}
 
 class Printer {
-    constructor(ipPrinter, port, ipcR) {
+    constructor(type, ipPrinter, port, ipcR) {
+        this.type = type
         this.ip = ipPrinter
         this.port = port
         this.ipc = ipcR
@@ -16,7 +17,7 @@ class Printer {
 
     init () {
         var _this = this
-        setInterval(()=> { _this.check()}, 3000)
+        if (this.type == 0) { setInterval(()=> { _this.check()}, 3000) } //ePOS printer
     }
 
     async printTicket(cola, numero) {
@@ -33,22 +34,27 @@ class Printer {
         ctx.font = 'bold 200px Arial'; ctx.fillText(numero, 250, 200)
         // footer
         ctx.drawImage(this.footer, 120, 230, 240, 38 )
+        const imageData = ctx.getImageData(0,0,512,280)
 
-        const raster = this.toMonoImage( ctx.getImageData(0,0,512,280) )
-        
-        let printData = '<?xml version="1.0" encoding="utf-8"?><s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"><s:Body><epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">'
-        printData += `<image width="512" height="280" color="color_1" mode="mono">${btoa(raster)}</image>`
-        printData += '<cut type="feed" />'
-        printData += '</epos-print></s:Body></s:Envelope>'
-
-        //document.body.appendChild(canvas)
-        navigator.sendBeacon(this.url, new Blob([printData], {type:'text/plain'}))
+        switch (this.type) {
+            case 0: //ePOS printer
+            const raster = this.toMonoImage( imageData )
+                let printData = '<?xml version="1.0" encoding="utf-8"?><s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"><s:Body><epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">'
+                printData += `<image width="512" height="280" color="color_1" mode="mono">${btoa(raster)}</image>`
+                printData += '<cut type="feed" />'
+                printData += '</epos-print></s:Body></s:Envelope>'
+                navigator.sendBeacon(this.url, new Blob([printData], {type:'text/plain'}))
+            break
+            case 1: // Usb
+                this.ipc.send('printPage', `<!DOCTYPE html><html><head><title></title></head><body><img src="${canvas.toDataURL("image/png")}"></body></html>`)
+            break
+        }
         
         await sleep(5000)
         modalBox('printing', false)
     }
 
-    check() {
+    check() { //ePOS check
         if (!this.fetching) {
             this.fetching = true
             const data = {
@@ -92,7 +98,7 @@ class Printer {
       }
 
       
-      toMonoImage(imgdata) {
+    toMonoImage(imgdata) {
         let m8 = [
             [2, 130, 34, 162, 10, 138, 42, 170],
             [194, 66, 226, 98, 202, 74, 234, 106],

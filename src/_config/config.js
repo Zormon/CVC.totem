@@ -12,6 +12,7 @@ function savePreferences() {
 
     prefs.server.ip =   $('serverIp').value != ''? $('serverIp').value : $('serverIp').placeholder
     prefs.server.port = parseInt( $('serverPort').value != ''? $('serverPort').value : $('serverPort').placeholder )
+    prefs.printer.type = parseInt($('printerType').value)
     prefs.printer.ip =  $('printerIp').value != ''? $('printerIp').value : $('printerIp').placeholder
     prefs.printer.port = parseInt( $('printerPort').value != ''? $('printerPort').value : $('printerPort').placeholder )
 
@@ -69,6 +70,19 @@ $('logsDir').onclick = ()=> {
     $('logsDir').value = dir
 }
 
+$('printerType').onchange = (e) => { 
+    switch (parseInt(e.currentTarget.value)) {
+        case 0: // ePOS
+            $('printerIp').disabled = false
+            $('printerPort').disabled = false
+        break
+        case 1: // USB
+            $('printerIp').disabled = true
+            $('printerPort').disabled = true
+        break
+    }
+}
+
 $('windowType').onchange = (e) => { 
     switch (e.currentTarget.value) {
         case '0': //Fullscreen
@@ -92,6 +106,7 @@ $('contentDir').value = prefs.contentDir
 $('logsDir').value = prefs.logsDir
 $('serverIp').value = prefs.server.ip
 $('serverPort').value = prefs.server.port
+$('printerType').value = prefs.printer.type
 $('printerIp').value = prefs.printer.ip
 $('printerPort').value = prefs.printer.port
 
@@ -103,3 +118,4 @@ $('windowPosY').value = prefs.window.posY
 
 const event = new Event('change')
 $('windowType').dispatchEvent(event)
+$('printerType').dispatchEvent(event)

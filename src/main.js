@@ -25,6 +25,7 @@ var appWin; var configWin; var configServerWin; var configUIWin;
       port: 3000,
     },
     printer: {
+      type: 0,
       ip:'192.168.1.241',
       port: 8008,
     },
@@ -188,7 +189,7 @@ var appWin; var configWin; var configServerWin; var configUIWin;
   }
 
   function config() {
-    configWin = new BrowserWindow({width: 720, height: 440, show:false, alwaysOnTop: true, webPreferences: { enableRemoteModule: true, nodeIntegration: true, parent: appWin }})
+    configWin = new BrowserWindow({width: 720, height: 500, show:false, alwaysOnTop: true, webPreferences: { enableRemoteModule: true, nodeIntegration: true, parent: appWin }})
     configWin.loadFile(`${__dirname}/_config/config.html`)
     configWin.setMenu( null )
     configWin.resizable = false
@@ -238,6 +239,21 @@ app.on('ready', initApp)
 /*=============================================
 =                 IPC signals                 =
 =============================================*/
+
+ipcMain.on('printPage', (e, page) => { 
+  var printOptions = { 
+    silent: true, printBackground: true, color: false, 
+    margin: { marginType: 'printableArea' }, 
+    landscape: false, pagesPerSheet: 1, collate: false, copies: 1, 
+    header: '', footer: ''
+  }
+  let printWin = new BrowserWindow({ show: false, webPreferences: { nodeIntegration: true} })
+  printWin.loadURL("data:text/html;charset=utf-8," + encodeURI(page))
+
+  printWin.webContents.on('did-finish-load', () => { 
+      printWin.webContents.print(printOptions)
+  })
+})
 
 ipcMain.on('savePrefs', (e, arg) => { 
   global.appConf = arg

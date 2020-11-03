@@ -52,7 +52,7 @@ var content = new Content(conf.contentDir, ipcRenderer)
 content.updatePlaylist().then( ()=> { content.next() })
 setInterval('content.updatePlaylist()', 60000) // 60 seconds
 
-var printer = new Printer(conf.printer.ip, conf.printer.port, ipcRenderer)
+var printer = new Printer(conf.printer.type, conf.printer.ip, conf.printer.port, ipcRenderer)
 printer.init()
 
 var ws = new wSocket(conf.server.ip, conf.server.port, ui, printer, ipcRenderer)
