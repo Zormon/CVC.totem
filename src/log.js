@@ -9,7 +9,7 @@ class Logger {
         this.errorsDisabled = false
     }
 
-    log(origin, event, message, rot=true) {
+    log(origin, event, message) {
         if ( !fs.existsSync(`${this.logDir}${this.appName}.app.log`) ) {
             try { fs.writeFileSync(`${this.logDir}${this.appName}.app.log`, `# ${this.appName} APPLICATION LOG\n# TIME; ORIGIN; EVENT; MESSAGE`) } catch(e) { this.logsDisabled = true }
         }
@@ -25,7 +25,6 @@ class Logger {
                         event.toUpperCase() + ';' + 
                         message;
             fs.appendFileSync(`${this.logDir}${this.appName}.app.log`, '\n' + line )
-            if (rot) { this.rotate(4000000) } // ~4MB
         }
     }
 
@@ -45,22 +44,6 @@ class Logger {
                         error.toUpperCase() + ';' + 
                         message;
             fs.appendFileSync(`${this.logDir}${this.appName}.error.log`, '\n' + line )
-            if (rot) { this.rotate(1000000, 'error') } // ~1MB
-        }
-    }
-
-    // Rota logs si el archivo supera el tamaño especificado
-    rotate(maxSize, type='app') {
-        const now = Date.now()
-
-        try {
-            var size = fs.statSync(`${this.logDir}${this.appName}.${type}.log`)['size']
-        } catch(err) { this.error('LOGS', 'CANT_ROTATE', err); return }
-        
-        if (size > maxSize) {
-            fs.copyFileSync(`${this.logDir}${this.appName}.${type}.log`, `${this.logDir}/${now}.${this.appName}.${type}.log`)
-            fs.unlinkSync(`${this.logDir}${this.appName}.${type}.log`)
-            this.log('LOGS', 'ROTATE', now.toString(), false)
         }
     }
 }

@@ -12,13 +12,13 @@ var appWin; var configWin; var configServerWin; var configUIWin;
 =            Preferencias            =
 =============================================*/
 
-  const CONFIG_FILE = `${app.getPath('userData')}/appConf.json`
-  const CONFIGUI_FILE = `${app.getPath('userData')}/appConfUI.json`
+  const CONFIG_FILE = `${app.getPath('userData')}/APPCONF.json`
+  const CONFIGUI_FILE = `${app.getPath('userData')}/APPCONFUI.json`
 
   // Defaults
   const DEFAULT_CONFIG = { 
     contentDir: '/home/cvc/_contenidos',
-    logsDir: '/home/cvc/telemetry/logs',
+    logsDir: '/home/cvc/telemetry/apps',
     exColas: [],
     server: {
       ip:'127.0.0.1',
