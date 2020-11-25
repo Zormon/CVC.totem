@@ -158,6 +158,9 @@ var appWin; var configWin; var configServerWin; var configUIWin;
     appWin = new BrowserWindow(windowOptions)
 
     switch (appConf.window.type) {
+      case 0: // Fullscreen
+        screen.on('display-metrics-changed', restart )
+      break
       case 1: // Borderless
         appWin.setPosition( appConf.window.posX, appConf.window.posY)
       case 2: // Normal Window
