@@ -46,7 +46,12 @@ class Printer {
                 navigator.sendBeacon(this.url, new Blob([printData], {type:'text/plain'}))
             break
             case 1: // Usb
-                this.ipc.send('printPage', `<!DOCTYPE html><html><head><title></title></head><body><img src="${canvas.toDataURL("image/png")}"></body></html>`)
+                let printPage = '<!DOCTYPE html><html><head><title></title>'
+                printPage += '<style>body, html { margin:0; padding:0; } img { width: 100vw; }</style>'
+                printPage += '</head><body>'
+                printPage += `<img src="${canvas.toDataURL("image/png")}">`
+                printPage += '</body></html>'
+                this.ipc.send('printPage', printPage)
             break
         }
         

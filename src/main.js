@@ -243,10 +243,10 @@ app.on('ready', initApp)
 =                 IPC signals                 =
 =============================================*/
 
-ipcMain.on('printPage', (e, page) => { 
+ipcMain.on('printPage', (e, page) => {
   var printOptions = { 
     silent: true, printBackground: true, color: false, 
-    margin: { marginType: 'printableArea' }, 
+    margins: { marginType: 'none' }, 
     landscape: false, pagesPerSheet: 1, collate: false, copies: 1, 
     header: '', footer: ''
   }
