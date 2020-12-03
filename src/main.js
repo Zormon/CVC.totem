@@ -1,5 +1,5 @@
 const appName = 'totem'
-const { app, BrowserWindow, Menu, ipcMain, dialog } = require('electron')
+const { app, BrowserWindow, Menu, ipcMain, dialog, screen } = require('electron')
 const fs = require("fs")
 const path = require('path')
 const logger = require('./log.js')
