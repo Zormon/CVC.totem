@@ -1,12 +1,4 @@
-function $(id)      { return document.getElementById(id)    }
-function $$(id)     { return document.querySelector(id)     }
-function $$$(id)    { return document.querySelectorAll(id)  }
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)) }
-
-const remote = require('electron').remote
-const { ipcRenderer } = require('electron')
-const prefs = remote.getGlobal('appConf')
-
+const prefs = window.ipc.get.appConf()
 var colas = {}
 
 async function saveConfig() {

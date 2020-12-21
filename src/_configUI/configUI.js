@@ -1,12 +1,5 @@
-function $(id)      { return document.getElementById(id)    }
-function $$(id)     { return document.querySelector(id)     }
-function $$$(id)    { return document.querySelectorAll(id)  }
-
-const remote = require('electron').remote
-const { ipcRenderer, contextBridge } = require('electron')
 const event = new Event('change')
-
-var interface = remote.getGlobal('interface')
+var interface = window.ipc.get.interface()
 
 function saveConfigUI() {
     interface.info = $('info').checked
@@ -27,7 +20,7 @@ function saveConfigUI() {
         interface.barImg = {name: 'barImage.png', file: $('canvasBarImg').toDataURL("image/png").substring(22)}
     }
 
-    ipcRenderer.send('saveInterface', interface )
+    window.ipc.save.interface(interface )
 }
 
 function canvasThumb(event, canvas, width, height) {

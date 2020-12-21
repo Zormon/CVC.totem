@@ -1,7 +1,7 @@
 {
   "name": "totem",
   "productName": "totem",
-  "version": "4.2.2",
+  "version": "5.1.0",
   "description": "Totem CVC",
   "main": "src/main.js",
   "scripts": {
@@ -19,7 +19,7 @@
     }
   },
   "devDependencies": {
-    "@electron-forge/cli": "6.0.0-beta.53",
-    "electron": "^10.1.2"
+    "@electron-forge/cli": "6.0.0-beta.54",
+    "electron": "^11.0.3"
   }
 }

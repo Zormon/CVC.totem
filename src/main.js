@@ -115,7 +115,7 @@ var appWin; var configWin; var configServerWin; var configUIWin;
     }
   }
 
-  function savePrefs(prefs, file) {
+  function saveConfFile(prefs, file) {
     fs.writeFileSync(file, JSON.stringify(prefs), 'utf8')
   }
 
@@ -129,8 +129,8 @@ var appWin; var configWin; var configServerWin; var configUIWin;
   }
 
   function restore() {
-    savePrefs(DEFAULT_CONFIG, CONFIG_FILE)
-    savePrefs(DEFAULT_UI, CONFIGUI_FILE)
+    saveConfFile(DEFAULT_CONFIG, CONFIG_FILE)
+    saveConfFile(DEFAULT_UI, CONFIGUI_FILE)
     restart() 
   }
 
@@ -152,7 +152,7 @@ var appWin; var configWin; var configServerWin; var configUIWin;
 =============================================*/
 
   function initApp() {
-    let windowOptions = {autoHideMenuBar: true, resizable:true, show: false, webPreferences: { enableRemoteModule: true, nodeIntegration: true}, icon: `${app.getAppPath()}/icon64.png`}
+    let windowOptions = {autoHideMenuBar: true, resizable:true, show: false, webPreferences: { contextIsolation: true, preload: path.join(__dirname, "preload.js") }, icon: `${app.getAppPath()}/icon64.png`}
     if      (appConf.window.type == 0)   { windowOptions.fullscreen = true }
     else if (appConf.window.type == 1)   { windowOptions.frame = false; windowOptions.alwaysOnTop = true } // Borderless
     appWin = new BrowserWindow(windowOptions)
@@ -192,7 +192,7 @@ var appWin; var configWin; var configServerWin; var configUIWin;
   }
 
   function config() {
-    configWin = new BrowserWindow({width: 720, height: 500, show:false, alwaysOnTop: true, webPreferences: { enableRemoteModule: true, nodeIntegration: true, parent: appWin }})
+    configWin = new BrowserWindow({width: 720, height: 500, show:false, alwaysOnTop: true, webPreferences: { contextIsolation: true, preload: path.join(__dirname, "preload.js"), parent: appWin }})
     configWin.loadFile(`${__dirname}/_config/config.html`)
     configWin.setMenu( null )
     configWin.resizable = false
@@ -204,7 +204,7 @@ var appWin; var configWin; var configServerWin; var configUIWin;
 
     // Ventana de personalizacion de interfaz
     function configUI() {
-      configUIWin = new BrowserWindow({width: 700, height: 460, show:false, alwaysOnTop: true, resizable: false, webPreferences: { enableRemoteModule: true, nodeIntegration: true, parent: appWin }})
+      configUIWin = new BrowserWindow({width: 700, height: 460, show:false, alwaysOnTop: true, resizable: false, webPreferences: { contextIsolation: true, preload: path.join(__dirname, "preload.js"), parent: appWin }})
       configUIWin.loadFile(`${__dirname}/_configUI/configUI.html`)
       configUIWin.setMenu( null )
       configUIWin.show()
@@ -214,7 +214,7 @@ var appWin; var configWin; var configServerWin; var configUIWin;
     }
 
   function configServer() {
-    configServerWin = new BrowserWindow({width: 400, height: 550, show:false, alwaysOnTop: true, resizable: false, webPreferences: { enableRemoteModule: true, nodeIntegration: true, parent: appWin }})
+    configServerWin = new BrowserWindow({width: 400, height: 550, show:false, alwaysOnTop: true, resizable: false, webPreferences: { contextIsolation: true, preload: path.join(__dirname, "preload.js"), parent: appWin }})
     configServerWin.loadFile(`${__dirname}/_configServer/configServer.html`)
     configServerWin.setMenu( null )
     configServerWin.show()
@@ -243,14 +243,22 @@ app.on('ready', initApp)
 =                 IPC signals                 =
 =============================================*/
 
+ipcMain.on('getGlobal', (e, type) => {
+  switch(type) {
+    case 'appConf':
+      e.returnValue = global.appConf
+    break;
+    case 'interface':
+      e.returnValue = global.interface
+    break;
+  }
+})
+
 ipcMain.on('printPage', (e, page) => {
   var printOptions = { 
-    silent: true, printBackground: true, color: false, 
-    margins: { marginType: 'none' }, 
-    landscape: false, pagesPerSheet: 1, collate: false, copies: 1, 
-    header: '', footer: ''
+    silent: true, printBackground: true
   }
-  let printWin = new BrowserWindow({ show: false, webPreferences: { nodeIntegration: true} })
+  let printWin = new BrowserWindow({ show: false , webPreferences: {contextIsolation: true}})
   printWin.loadURL("data:text/html;charset=utf-8," + encodeURI(page))
 
   printWin.webContents.on('did-finish-load', () => { 
@@ -258,9 +266,9 @@ ipcMain.on('printPage', (e, page) => {
   })
 })
 
-ipcMain.on('savePrefs', (e, arg) => { 
+ipcMain.on('saveAppConf', (e, arg) => { 
   global.appConf = arg
-  savePrefs(arg, CONFIG_FILE)
+  saveConfFile(arg, CONFIG_FILE)
   logs.log('MAIN', 'SAVE_PREFS', JSON.stringify(arg))
 
   //Logo cliente
@@ -274,7 +282,7 @@ ipcMain.on('savePrefs', (e, arg) => {
 
 ipcMain.on('saveInterface', (e, arg) => { 
   global.interface = arg
-  savePrefs(arg, CONFIGUI_FILE)
+  saveConfFile(arg, CONFIGUI_FILE)
   logs.log('MAIN', 'SAVE_INTERFACE', JSON.stringify(arg))
 
   //Logo cliente

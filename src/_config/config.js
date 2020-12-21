@@ -1,10 +1,4 @@
-function $(id)      { return document.getElementById(id)    }
-function $$(id)     { return document.querySelector(id)     }
-function $$$(id)    { return document.querySelectorAll(id)  }
-
-const remote = require('electron').remote
-const { ipcRenderer } = require('electron')
-var prefs = remote.getGlobal('appConf')
+var prefs = window.ipc.get.appConf()
 
 function savePreferences() {
     prefs.contentDir = $('contentDir').value
@@ -27,7 +21,7 @@ function savePreferences() {
         prefs.printLogo = {name: 'printFooter.png', file: $('canvasFooter').toDataURL("image/png").substring(22)}
     }
 
-    ipcRenderer.send('savePrefs', prefs )
+    window.ipc.save.appConf( prefs )
 }
 
 function canvasThumb(event, canvas, width, height) {
@@ -61,12 +55,12 @@ $('save').onclick = (e)=> {
 }
 
 $('contentDir').onclick = ()=> {
-    let dir = ipcRenderer.sendSync('saveDirDialog', {dir: $('contentDir').value, file:'lista.xml'})
+    let dir = window.ipc.dialog.saveDir({dir: $('contentDir').value, file:'lista.xml'})
     $('contentDir').value = dir
 }
 
 $('logsDir').onclick = ()=> {
-    let dir = ipcRenderer.sendSync('saveDirDialog', {dir: $('logsDir').value, file:false})
+    let dir = window.ipc.dialog.saveDir({dir: $('logsDir').value, file:false})
     $('logsDir').value = dir
 }
 

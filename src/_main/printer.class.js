@@ -1,12 +1,11 @@
-function $$(id)     { return document.querySelector(id)     }
-function sleep(ms) { return new Promise(resolve=>setTimeout(resolve,ms));}
-
 class Printer {
-    constructor(type, ipPrinter, port, ipcR) {
-        this.type = type
-        this.ip = ipPrinter
-        this.port = port
-        this.ipc = ipcR
+    constructor(conf, ipc) {
+        this.type = conf.type
+        this.ip = conf.ip
+        this.port = conf.port
+        this.log = ipc.logger.std
+        this.logError = ipc.logger.error
+        this.printPage = ipc.printer.printPage
 
         this.fetching = false
         this.url = `http://${this.ip}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=3000`
@@ -22,7 +21,7 @@ class Printer {
 
     async printTicket(cola, numero) {
         modalBox('printing', 'print', `Imprimiendo ticket ${numero} para ${cola}`, 'Recoja su ticket debajo')
-        this.ipc.send('log', {origin: 'PRINT', event: 'TICKET', message: `Imprimiendo ticket ${numero} de cola ${cola}`})
+        this.log({origin: 'PRINT', event: 'TICKET', message: `Imprimiendo ticket ${numero} de cola ${cola}`})
         
         let canvas = document.createElement('canvas'); canvas.className = 'ticket'
         let ctx = canvas.getContext("2d")
@@ -51,7 +50,7 @@ class Printer {
                 printPage += '</head><body>'
                 printPage += `<img src="${canvas.toDataURL("image/png")}">`
                 printPage += '</body></html>'
-                this.ipc.send('printPage', printPage)
+                this.printPage(printPage)
             break
         }
         
@@ -78,27 +77,27 @@ class Printer {
                     switch (xml.getAttribute('code')) {
                         case 'EPTR_COVER_OPEN':
                             errorText = 'Tapa abierta'
-                            this.ipc.send('logError', {origin: 'PRINT', error: 'COVER_OPEN', message:  errorText})
+                            this.logError({origin: 'PRINT', error: 'COVER_OPEN', message:  errorText})
                         break;
                         case 'EPTR_REC_EMPTY':
                             errorText = 'No hay papel'
-                            this.ipc.send('logError', {origin: 'PRINT', error: 'REC_EMPTY', message:  errorText})
+                            this.logError({origin: 'PRINT', error: 'REC_EMPTY', message:  errorText})
                         break;
                         default:
                             errorText = xml.getAttribute('code')
-                            this.ipc.send('logError', {origin: 'PRINT', error: 'UNKNOWN', message:  errorText})
+                            this.logError({origin: 'PRINT', error: 'UNKNOWN', message:  errorText})
                         break;
                     }
                     modalBox('printError', 'error', 'ERROR DE IMPRESORA', errorText)
                 }
             }).catch((e)=> {
                 modalBox('printError', 'error', 'ERROR DE RED', 'No se puede acceder a la red')
-                this.ipc.send('logError', {origin: 'NETWORK', error: 'NETWORK_UNREACHABLE', message: e.message})
+                this.logError({origin: 'NETWORK', error: 'NETWORK_UNREACHABLE', message: e.message})
              })
             .finally(()=>{ this.fetching = false })
         } else {
             modalBox('printError', 'error', 'ERROR DE IMPRESORA', 'La impresora no responde')
-            this.ipc.send('logError', {origin: 'PRINT', error: 'OFFLINE', message: `${this.ip}:${this.port}`})
+            this.logError({origin: 'PRINT', error: 'OFFLINE', message: `${this.ip}:${this.port}`})
         }
       }
 

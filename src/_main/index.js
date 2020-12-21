@@ -1,8 +1,5 @@
-function $(i){return document.getElementById(i)}
-const {remote, ipcRenderer} = require('electron')
-const conf = remote.getGlobal('appConf')
-const ui = remote.getGlobal('interface')
-
+const conf = window.ipc.get.appConf()
+const ui = window.ipc.get.interface()
 
 /*=============================================
 =            Funciones            =
@@ -48,14 +45,14 @@ css.insertRule(` :root { --main-color: ${ui.colors.main};  } `)
 css.insertRule(` :root { --secondary-color: ${ui.colors.secondary}; } `)
 document.adoptedStyleSheets = [css]
 
-var content = new Content(conf.contentDir, ipcRenderer)
+var content = new Content(conf.contentDir, window.ipc.logger )
 content.updatePlaylist().then( ()=> { content.next() })
 setInterval('content.updatePlaylist()', 60000) // 60 seconds
 
-var printer = new Printer(conf.printer.type, conf.printer.ip, conf.printer.port, ipcRenderer)
+var printer = new Printer(conf.printer, { printer: window.ipc.printer, logger: window.ipc.logger })
 printer.init()
 
-var ws = new wSocket(conf.server.ip, conf.server.port, ui, printer, ipcRenderer)
+var ws = new wSocket(conf.server, ui.exColas, printer, window.ipc.logger )
 ws.init()
 
 time()
@@ -72,7 +69,7 @@ window.onkeyup = (e)=> {
     // Enter: Siguiente contenido
     case 13:
       content.next()
-      this.ipc.send('log', {origin: 'USER', event: 'SKIP_CONTENT', message: ''})
+      window.ipc.log({origin: 'USER', event: 'SKIP_CONTENT', message: ''})
     break
     // P: Pausa
     case 80:

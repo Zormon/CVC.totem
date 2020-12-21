@@ -2,14 +2,15 @@
 const FADE_DURATION = 0.25
 
 class Content {
-    constructor(dir, ipcR) {
+    constructor(dir, logger) {
         this.contenidos = null
         this.dir = dir
         this.current = null
         this.paused = false
         this.el = null
         this.startTimer
-        this.ipc = ipcR
+        this.log = logger.std
+        this.logError = logger.error
         this.nextTimeout
         this.contentTimer
         this.fadeTimer
@@ -51,20 +52,20 @@ class Content {
                 this.el.src = `file://${this.dir}/files/${this.current.fichero}`
                 this.el.onerror = (e)=> { 
                     this.nextTimeout = setTimeout(()=> { _this.next() }, 2000) 
-                    this.ipc.send('logError', {origin: 'MEDIA', error: 'NOT_FOUND', message: `No se ha encontrado el archivo: ${this.current.fichero}`})
+                    this.logError({origin: 'MEDIA', error: 'NOT_FOUND', message: `No se ha encontrado el archivo: ${this.current.fichero}`})
                 }
                     
                 $('media').appendChild(this.el)
                 setTimeout(()=>{this.el.className = 'visible'}, 15) // Aplica la clase con un pequeño delay porque sino no funciona la animacion
                 localStorage.setItem('nextContent', ++next)
 
-                this.ipc.send('log', {origin: 'MEDIA', event: 'NEXT', message: `Nombre: ${this.current.nombre}`})
+                this.log({origin: 'MEDIA', event: 'NEXT', message: `Nombre: ${this.current.nombre}`})
             } else { // Si no encontro contenidos, vuelve a intentar a los 5sg
-                this.ipc.send('logError', {origin: 'MEDIA', error: 'NO_CONTENTS', message:  'No hay contenidos'})
+                this.logError({origin: 'MEDIA', error: 'NO_CONTENTS', message:  'No hay contenidos'})
                 this.nextTimeout = setTimeout(()=> {_this.next()}, 5000) 
             }
         } else { // Lo vuelve a intentar a los dos segundos
-            this.ipc.send('logError', {origin: 'MEDIA', error: 'CANT_PLAY', message:  'La música estaba haciendo fading, no hay contenidos o estan pausados'})
+            this.logError({origin: 'MEDIA', error: 'CANT_PLAY', message:  'La música estaba haciendo fading, no hay contenidos o estan pausados'})
             this.nextTimeout = setTimeout(()=> {_this.next()}, 2000) 
         }
     }
@@ -75,12 +76,12 @@ class Content {
             this.contentTimer.pause()
             if (this.el.nodeName == 'VIDEO') { this.el.pause() }
 
-            this.ipc.send('log', {origin: 'MEDIA', event: 'PAUSE', message: `Nombre: ${this.current.nombre}`})
+            this.log({origin: 'MEDIA', event: 'PAUSE', message: `Nombre: ${this.current.nombre}`})
         } else { // Play
             this.fadeTimer.play()
             this.contentTimer.play()
             if (this.el.nodeName == 'VIDEO') { this.el.play() }
-            this.ipc.send('log', {origin: 'MEDIA', event: 'RESUME', message: `Nombre: ${this.current.nombre}`})
+            this.log({origin: 'MEDIA', event: 'RESUME', message: `Nombre: ${this.current.nombre}`})
         }
         this.paused = !this.paused
     }
@@ -105,7 +106,7 @@ class Content {
                 }
             }
 
-            this.ipc.send('log', {origin: 'MEDIA', event: 'UPDATE_PLAYLIST', message: `Equipo: ${equipo}, Contenidos: ${nodes.length}`})
+            this.log({origin: 'MEDIA', event: 'UPDATE_PLAYLIST', message: `Equipo: ${equipo}, Contenidos: ${nodes.length}`})
         })
       }
 }

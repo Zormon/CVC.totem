@@ -1,14 +1,11 @@
-function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)) }
-function $$(id)     { return document.querySelector(id)     }
-function isFunction(f) {return f && {}.toString.call(f)==='[object Function]'}
-
 class wSocket {
-    constructor(ip, port, ui, printer, ipcR) {
-        this.ip = ip
-        this.port = port
-        this.ui = ui
+    constructor(conf, exColas, printer, logger) {
+        this.ip = conf.ip
+        this.port = conf.port
+        this.exColas = exColas
         this.printer = printer
-        this.ipc = ipcR
+        this.log = logger.std
+        this.logError = logger.error
     }
 
     init() {
@@ -21,15 +18,15 @@ class wSocket {
             switch (msg.accion) {
                 case 'spread':
                     this.spread(msg.colas, msg.turnos, msg.tickets)
-                    this.ipc.send('log', {origin: 'TURNOMATIC', event: 'SPREAD', message: `Colas: ${JSON.stringify(msg.colas)}, Turnos: ${JSON.stringify(msg.turnos)}, Tickets: ${JSON.stringify(msg.tickets)}`})
+                    this.log({origin: 'TURNOMATIC', event: 'SPREAD', message: `Colas: ${JSON.stringify(msg.colas)}, Turnos: ${JSON.stringify(msg.turnos)}, Tickets: ${JSON.stringify(msg.tickets)}`})
                 break
                 case 'update':
                     this.update(msg.cola, msg.numero)
-                    this.ipc.send('log', {origin: 'TURNOMATIC', event: 'UPDATE', message: `Cola: ${msg.cola}, Numero: ${msg.numero}`})
+                    this.log({origin: 'TURNOMATIC', event: 'UPDATE', message: `Cola: ${msg.cola}, Numero: ${msg.numero}`})
                 break
                 case 'updateTicket':
                     this.updateTicket(msg.cola, msg.numero)
-                    this.ipc.send('log', {origin: 'TURNOMATIC', event: 'UPDATETICKET', message: `Ticket: ${msg.cola}, Numero: ${msg.numero}`})
+                    this.log({origin: 'TURNOMATIC', event: 'UPDATETICKET', message: `Ticket: ${msg.cola}, Numero: ${msg.numero}`})
                 break
                 default:
                     modalBox('socketError', false)
@@ -51,7 +48,7 @@ class wSocket {
 
         let ncolas = 0
         for (let i=0; i < colas.length; i++) {
-            if ( this.ui.exColas.indexOf(i+1) == -1 ) { 
+            if ( this.exColas.indexOf(i+1) == -1 ) { 
                 ncolas++
                 // Tickets
                 let ticket = document.createElement('div'); ticket.id =  `ticket${i}`;
@@ -93,7 +90,7 @@ class wSocket {
 
             // Error Modal
             modalBox('socketError', 'error', 'ERROR DE CONEXIÓN', `Conectando a ${remote.getGlobal('appConf').server.ip}`)
-            this.ipc.send('logError', {origin: 'TURNOMATIC', error: 'OFFLINE', message: `Conectando a ${remote.getGlobal('appConf').server.ip}`})
+            this.logError({origin: 'TURNOMATIC', error: 'OFFLINE', message: `Conectando a ${remote.getGlobal('appConf').server.ip}`})
         }, 5000)
       }
 }
