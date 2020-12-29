@@ -3,10 +3,10 @@ class Printer {
         this.type = conf.type
         this.ip = conf.ip
         this.port = conf.port
-        this.disabled = conf.disabled
         this.log = ipc.logger.std
         this.logError = ipc.logger.error
         this.printPage = ipc.printer.printPage
+        this.disabled = conf.ticket.disabled
         this.width = conf.ticket.width
 
         this.fetching = false

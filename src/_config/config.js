@@ -7,7 +7,7 @@ function savePreferences() {
     CONF.server.ip =   $('serverIp').value != ''? $('serverIp').value : $('serverIp').placeholder
     CONF.server.port = parseInt( $('serverPort').value != ''? $('serverPort').value : $('serverPort').placeholder )
     CONF.printer.type = parseInt($('printerType').value)
-    CONF.printer.disabled = $('printDisable').checked
+    CONF.printer.ticket.disabled = $('printDisable').checked
     CONF.printer.ip =  $('printerIp').value != ''? $('printerIp').value : $('printerIp').placeholder
     CONF.printer.port = parseInt( $('printerPort').value != ''? $('printerPort').value : $('printerPort').placeholder )
     CONF.printer.ticket.width = parseInt( $('ticketWidth').value != ''? $('ticketWidth').value : $('ticketWidth').placeholder )
@@ -103,7 +103,7 @@ $('logsDir').value = CONF.logsDir
 $('serverIp').value = CONF.server.ip
 $('serverPort').value = CONF.server.port
 $('printerType').value = CONF.printer.type
-$('printDisable').checked = CONF.printer.disabled
+$('printDisable').checked = CONF.printer.ticket.disabled
 $('printerIp').value = CONF.printer.ip
 $('printerPort').value = CONF.printer.port
 $('ticketWidth').value = CONF.printer.ticket.width

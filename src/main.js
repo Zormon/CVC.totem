@@ -28,10 +28,9 @@ var appWin; var configWin; var configServerWin; var configUIWin;
       type: 0,
       ip:'192.168.1.241',
       port: 8008,
-      disabled: false,
       ticket: {
         width: 300,
-        height: 280
+        disabled: false
       }
     },
     window: {
@@ -267,7 +266,7 @@ ipcMain.on('printPage', (e, page) => {
   printWin.loadURL("data:text/html;charset=utf-8," + encodeURI(page))
 
   printWin.webContents.on('did-finish-load', () => {
-      if (!global.APPCONF.printer.disabled) { printWin.webContents.print(printOptions) }
+      if (!global.APPCONF.printer.ticket.disabled) { printWin.webContents.print(printOptions) }
   })
 })
 
