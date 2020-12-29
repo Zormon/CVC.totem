@@ -1,26 +1,27 @@
 const event = new Event('change')
-var interface = window.ipc.get.interface()
+var UI = window.ipc.get.interface()
 
 function saveConfigUI() {
-    interface.info = $('info').checked
-    interface.type = parseInt($('type').value)
+    UI.info = $('info').checked
+    UI.type = parseInt($('type').value)
+    UI.ticketAreaSize = parseInt($('ticketAreaSize').value)
 
-    interface.colors.main = $('mainColor').value
-    interface.colors.secondary = $('secondaryColor').value
+    UI.colors.main = $('mainColor').value
+    UI.colors.secondary = $('secondaryColor').value
 
-    interface.exColas = Array.from( $('exColas').selectedOptions ).map(el => parseInt(el.value))
+    UI.exColas = Array.from( $('exColas').selectedOptions ).map(el => parseInt(el.value))
 
     // Imagen de logo
     if (typeof $('footerLogo').files[0] != 'undefined') {
-        interface.logo = {name: 'logoCliente.png', file: $('canvasLogo').toDataURL("image/png").substring(22)}
+        UI.logo = {name: 'logoCliente.png', file: $('canvasLogo').toDataURL("image/png").substring(22)}
     }
 
     // Imagen de barra
     if (typeof $('barImg').files[0] != 'undefined') {
-        interface.barImg = {name: 'barImage.png', file: $('canvasBarImg').toDataURL("image/png").substring(22)}
+        UI.barImg = {name: 'barImage.png', file: $('canvasBarImg').toDataURL("image/png").substring(22)}
     }
 
-    window.ipc.save.interface(interface )
+    window.ipc.save.interface(UI)
 }
 
 function canvasThumb(event, canvas, width, height) {
@@ -49,6 +50,17 @@ $('barImg').onchange = (e) => {
     else                                                    { clearCanvas($('canvasBarImg')) }
 }
 
+$('type').onchange = (e) => {
+    switch (parseInt(e.currentTarget.value)) {
+        case 0: // Vertical
+            $('ticketAreaSize').parentElement.style.display = 'none'
+        break
+        case 1: // Horizontal
+            $('ticketAreaSize').parentElement.style.display = ''
+        break
+    }
+}
+
 $('save').onclick = (e)=> {
     e.preventDefault()
     if ( $('configUI').checkValidity() )    { saveConfigUI() } 
@@ -59,6 +71,7 @@ $('default').onclick = (e)=> {
     e.preventDefault()
     $('info').checked = true
     $('type').value = 0
+    $('ticketAreaSize').value = 50
     $('footerLogo').value = null
     $('mainColor').value = '#7eb031'
     $('secondaryColor').value = '#ffffff'
@@ -67,10 +80,14 @@ $('default').onclick = (e)=> {
 }
 
 // Initialization
-$('info').checked = interface.info
-$('type').value = interface.type
+$('info').checked = UI.info
+$('type').value = UI.type
+$('ticketAreaSize').value = UI.ticketAreaSize
 
-$('mainColor').value = interface.colors.main
-$('secondaryColor').value = interface.colors.secondary
+$('mainColor').value = UI.colors.main
+$('secondaryColor').value = UI.colors.secondary
 
-interface.exColas.forEach(num => { $$(`#exColas option[value='${num}'`).selected = true })
+UI.exColas.forEach(num => { $$(`#exColas option[value='${num}'`).selected = true })
+
+const ev = new Event('change')
+$('type').dispatchEvent(ev)

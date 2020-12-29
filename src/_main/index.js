@@ -43,6 +43,14 @@ if (!ui.info) { document.body.classList.add('noInfo') }
 const css = new CSSStyleSheet()
 css.insertRule(` :root { --main-color: ${ui.colors.main};  } `)
 css.insertRule(` :root { --secondary-color: ${ui.colors.secondary}; } `)
+switch (ui.type) {
+  case 0: // Vertical
+    // No implementado
+  break
+  case 1: // Horizontal
+    css.insertRule(` body { grid-template-columns: ${ui.ticketAreaSize}% auto !important; } `)
+  break
+}
 document.adoptedStyleSheets = [css]
 
 var content = new Content(conf.contentDir, window.ipc.logger )
@@ -69,7 +77,7 @@ window.onkeyup = (e)=> {
     // Enter: Siguiente contenido
     case 13:
       content.next()
-      window.ipc.log({origin: 'USER', event: 'SKIP_CONTENT', message: ''})
+      window.ipc.logger.std({origin: 'USER', event: 'SKIP_CONTENT', message: ''})
     break
     // P: Pausa
     case 80:

@@ -20,35 +20,14 @@
             <input type="text" id="logsDir" title="Requerido" placeholder="/home/cvc/telemetry/logs/" required>
           </div>
 
-          <fieldset>
-            <legend>Impresión</legend>
-            <label for="printerType">Tipo de impresora</label>
-            <select id="printerType">
-              <option value="0">EPSON ePOS</option>
-              <option value="1">Usb</option>
-            </select>
-
-            <label for="windowSize">IP de impresora</label>
+          <div>
+            <label>Servidor</label>
             <div class="coord">
-              <input type="text" id="printerIp" placeholder="192.168.1.241" pattern="(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)_*(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)_*){3}"> : 
-              <input type="num" id="printerPort" placeholder="8008" maxlength="5">
+              <input type="text" id="serverIp" placeholder="127.0.0.1" pattern="(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)_*(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)_*){3}"> : 
+              <input type="num" id="serverPort" placeholder="3000" maxlength="5">
             </div>
-  
-            <div>
-              <label for="printFooter">Pie de pagina de ticket (240px x 60px)</label>
-              <input type="file" id="printFooter" accept="image/png">
-            </div>
-            <div><canvas id="canvasFooter"></canvas></div>
-          </fieldset>
-        </div>
-
-        <div class="col">
-          <label for="windowSize">Servidor</label>
-          <div class="coord">
-            <input type="text" id="serverIp" placeholder="127.0.0.1" pattern="(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)_*(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)_*){3}"> : 
-            <input type="num" id="serverPort" placeholder="3000" maxlength="5">
           </div>
-          
+
           <fieldset>
             <legend>Ventana</legend>
             <select id="windowType">
@@ -58,19 +37,60 @@
             </select>
   
             
-            <label for="windowSize">Tamaño de la ventana</label>
+            <label>Tamaño de la ventana</label>
             <div class="coord">
-              <input type="num" id="windowSizeX" placeholder="480" maxlength="4"> x 
-              <input type="num" id="windowSizeY" placeholder="848" maxlength="4">
+              <input type="num" id="windowWidth" placeholder="480" maxlength="4"> x 
+              <input type="num" id="windowHeight" placeholder="848" maxlength="4">
             </div>
   
 
-            <label for="windowPos">Posición de la ventana</label>
+            <label>Posición de la ventana</label>
             <div class="coord">
               <input type="num" id="windowPosX" placeholder="0" maxlength="4"> x 
               <input type="num" id="windowPosY" placeholder="0" maxlength="4">
             </div>
           </fieldset>
+        </div>
+
+        <div class="col">
+          <fieldset>
+            <legend>Impresión</legend>
+            <label for="printerType">Tipo de impresora</label>
+            <select id="printerType">
+              <option value="0">EPSON ePOS</option>
+              <option value="1">Usb</option>
+            </select>
+
+            <label>IP de impresora</label>
+            <div class="coord">
+              <input type="text" id="printerIp" placeholder="192.168.1.241" pattern="(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)_*(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)_*){3}"> : 
+              <input type="num" id="printerPort" placeholder="8008" maxlength="5">
+            </div>
+
+            <div>
+              <label for="ticketWidth">Ancho del ticket</label>
+              <select id="ticketWidth">
+                <option value="150">150 px</option>
+                <option value="200">200 px</option>
+                <option value="300">300 px (default)</option>
+                <option value="340">350 px</option>
+                <option value="400">400 px</option>
+                <option value="500">500 px</option>
+              </select>
+            </div>
+
+            <div>
+              <input type="checkbox" id="printDisable">
+              <label for="printDisable">Impresión desactivada</label>
+            </div>
+  
+            <div>
+              <label for="printFooter">Pie de pagina de ticket (240px x 60px)</label>
+              <input type="file" id="printFooter" accept="image/png">
+            </div>
+            <div><canvas id="canvasFooter"></canvas></div>
+          </fieldset>
+
           <button id="save">Aplicar</button>
         </div>
       </form>

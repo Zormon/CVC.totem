@@ -73,6 +73,8 @@ body.config {
         }
     }
 
+    input[type="range"] { width: 90%; }
+
     fieldset {
         margin-bottom: 1em;
     }

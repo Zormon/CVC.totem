@@ -19,6 +19,13 @@
                 <option value="1">Horizontal</option>
               </select>
             </div>
+
+            <div>
+              <label for="ticketAreaSize">Ancho del area de tickets</label>
+              <input type="range" id="ticketAreaSize" name="ticketAreaSize" min="30" max="70" step="10" list="ticks"> 
+              <datalist id="ticks"><option value="30"><option value="40"><option value="50"><option value="60"><option value="70"></datalist>
+            </div>
+
             <div>
               <label for="exColas">Excluir colas</label>
               <select id="exColas" size="6" multiple>
@@ -30,6 +37,7 @@
                 <option value="6">6</option>
               </select>
             </div>
+
           </fieldset>
   
           <div>

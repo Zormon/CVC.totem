@@ -3,9 +3,11 @@ class Printer {
         this.type = conf.type
         this.ip = conf.ip
         this.port = conf.port
+        this.disabled = conf.disabled
         this.log = ipc.logger.std
         this.logError = ipc.logger.error
         this.printPage = ipc.printer.printPage
+        this.width = conf.ticket.width
 
         this.fetching = false
         this.url = `http://${this.ip}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=3000`
@@ -25,24 +27,25 @@ class Printer {
         
         let canvas = document.createElement('canvas'); canvas.className = 'ticket'
         let ctx = canvas.getContext("2d")
-        canvas.width = 512; canvas.height = 280
+        canvas.width = this.width; canvas.height = canvas.width
         ctx.textAlign = "center"
         // Cola
-        ctx.font = 'bold 32px Arial'; ctx.fillText(cola, 250, 40)
+        ctx.font = `bold ${Math.floor(canvas.width*.1)}px Arial`; ctx.fillText(cola, Math.floor(canvas.width*.5), Math.floor(canvas.height*.15))
         // Numero
-        ctx.font = 'bold 200px Arial'; ctx.fillText(numero, 250, 200)
+        ctx.font = `bold ${Math.floor(canvas.width*.6)}px Arial` ; ctx.fillText(numero, Math.floor(canvas.width*.5), Math.floor(canvas.height*.7))
         // footer
-        ctx.drawImage(this.footer, 120, 230, 240, 38 )
-        const imageData = ctx.getImageData(0,0,512,280)
+        const footerRatio = this.footer.width / this.footer.height
+        ctx.drawImage( this.footer, canvas.width*.1, canvas.width*.75, canvas.width*.7, canvas.width*.7/footerRatio )
+        const imageData = ctx.getImageData(0,0,canvas.width,canvas.height)
 
         switch (this.type) {
             case 0: //ePOS printer
             const raster = this.toMonoImage( imageData )
                 let printData = '<?xml version="1.0" encoding="utf-8"?><s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"><s:Body><epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">'
-                printData += `<image width="512" height="280" color="color_1" mode="mono">${btoa(raster)}</image>`
+                printData += `<image width="${this.width}" height="${this.height}" color="color_1" mode="mono">${btoa(raster)}</image>`
                 printData += '<cut type="feed" />'
                 printData += '</epos-print></s:Body></s:Envelope>'
-                navigator.sendBeacon(this.url, new Blob([printData], {type:'text/plain'}))
+                if (!this.disabled) { navigator.sendBeacon(this.url, new Blob([printData], {type:'text/plain'})) }
             break
             case 1: // Usb
                 let printPage = '<!DOCTYPE html><html><head><title></title>'

@@ -89,9 +89,8 @@ body.main {
         &.horizontal {
             grid-template:
                 "head  media"  1fr
-                "tickets  media"  9fr
+                "tickets  media"  10fr
                 "tickets  info"   2fr
-                / 1fr   1fr
             ;
         }
     }
@@ -111,7 +110,6 @@ body.main {
         &.horizontal {
             grid-template:
                 "colas  media"
-                / 1.6fr   8.4fr
             ;
         }
     }

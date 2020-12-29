@@ -28,19 +28,25 @@ var appWin; var configWin; var configServerWin; var configUIWin;
       type: 0,
       ip:'192.168.1.241',
       port: 8008,
+      disabled: false,
+      ticket: {
+        width: 300,
+        height: 280
+      }
     },
     window: {
       type: 0,
       posX: 0,
       posY: 0,
-      sizeX: 480,
-      sizeY: 848
+      height: 480,
+      width: 848
     }
   }
 
   const DEFAULT_UI = {
     info: true,
     type: 0,
+    ticketAreaSize: 40,
     exColas: [],
     colors: {
       main: '#7eb031',
@@ -48,8 +54,8 @@ var appWin; var configWin; var configServerWin; var configUIWin;
     }
   }
 
-  if ( !(global.appConf = loadConfigFile(CONFIG_FILE)) )      { global.appConf = DEFAULT_CONFIG }
-  if ( !(global.interface = loadConfigFile(CONFIGUI_FILE)) )  { global.interface = DEFAULT_UI }
+  if ( !(global.APPCONF = loadConfigFile(CONFIG_FILE)) )      { global.APPCONF = DEFAULT_CONFIG }
+  if ( !(global.UI = loadConfigFile(CONFIGUI_FILE)) )  { global.UI = DEFAULT_UI }
 
 /*=====  End of Preferencias  ======*/
 
@@ -153,25 +159,25 @@ var appWin; var configWin; var configServerWin; var configUIWin;
 
   function initApp() {
     let windowOptions = {autoHideMenuBar: true, resizable:true, show: false, webPreferences: { contextIsolation: true, preload: path.join(__dirname, "preload.js") }, icon: `${app.getAppPath()}/icon64.png`}
-    if      (appConf.window.type == 0)   { windowOptions.fullscreen = true }
-    else if (appConf.window.type == 1)   { windowOptions.frame = false; windowOptions.alwaysOnTop = true } // Borderless
+    if      (APPCONF.window.type == 0)   { windowOptions.fullscreen = true }
+    else if (APPCONF.window.type == 1)   { windowOptions.frame = false; windowOptions.alwaysOnTop = true } // Borderless
     appWin = new BrowserWindow(windowOptions)
 
-    switch (appConf.window.type) {
+    switch (APPCONF.window.type) {
       case 0: // Fullscreen
         screen.on('display-metrics-changed', restart )
       break
       case 1: // Borderless
-        appWin.setPosition( appConf.window.posX, appConf.window.posY)
+        appWin.setPosition( APPCONF.window.posX, APPCONF.window.posY)
       case 2: // Normal Window
-        appWin.setSize(appConf.window.sizeX, appConf.window.sizeY)
+        appWin.setSize(APPCONF.window.width, APPCONF.window.height)
         appWin.setResizable(false)
       break
     }
 
 
     let tpl
-    switch(interface.type) {
+    switch(UI.type) {
       case 0: // Vertical
         tpl = '_vertical'
       break;
@@ -192,7 +198,7 @@ var appWin; var configWin; var configServerWin; var configUIWin;
   }
 
   function config() {
-    configWin = new BrowserWindow({width: 720, height: 500, show:false, alwaysOnTop: true, webPreferences: { contextIsolation: true, preload: path.join(__dirname, "preload.js"), parent: appWin }})
+    configWin = new BrowserWindow({width: 720, height: 520, show:false, alwaysOnTop: true, webPreferences: { contextIsolation: true, preload: path.join(__dirname, "preload.js"), parent: appWin }})
     configWin.loadFile(`${__dirname}/_config/config.html`)
     configWin.setMenu( null )
     configWin.resizable = false
@@ -235,7 +241,6 @@ var appWin; var configWin; var configServerWin; var configUIWin;
 /*=====  End of Ventanas  ======*/
 
 
-
 app.on('ready', initApp)
 
 
@@ -246,11 +251,11 @@ app.on('ready', initApp)
 ipcMain.on('getGlobal', (e, type) => {
   switch(type) {
     case 'appConf':
-      e.returnValue = global.appConf
-    break;
+      e.returnValue = global.APPCONF
+    break
     case 'interface':
-      e.returnValue = global.interface
-    break;
+      e.returnValue = global.UI
+    break
   }
 })
 
@@ -258,16 +263,16 @@ ipcMain.on('printPage', (e, page) => {
   var printOptions = { 
     silent: true, printBackground: true
   }
-  let printWin = new BrowserWindow({ show: false , webPreferences: {contextIsolation: true}})
+  let printWin = new BrowserWindow({ show: false, webPreferences: {contextIsolation: true}})
   printWin.loadURL("data:text/html;charset=utf-8," + encodeURI(page))
 
-  printWin.webContents.on('did-finish-load', () => { 
-      printWin.webContents.print(printOptions)
+  printWin.webContents.on('did-finish-load', () => {
+      if (!global.APPCONF.printer.disabled) { printWin.webContents.print(printOptions) }
   })
 })
 
 ipcMain.on('saveAppConf', (e, arg) => { 
-  global.appConf = arg
+  global.APPCONF = arg
   saveConfFile(arg, CONFIG_FILE)
   logs.log('MAIN', 'SAVE_PREFS', JSON.stringify(arg))
 
@@ -281,7 +286,7 @@ ipcMain.on('saveAppConf', (e, arg) => {
 })
 
 ipcMain.on('saveInterface', (e, arg) => { 
-  global.interface = arg
+  global.UI = arg
   saveConfFile(arg, CONFIGUI_FILE)
   logs.log('MAIN', 'SAVE_INTERFACE', JSON.stringify(arg))
 
@@ -327,7 +332,7 @@ ipcMain.on('saveDirDialog', (e, arg) => {
 })
 
 // Logs
-var logs = new logger(`${global.appConf.logsDir}/`, appName)
+var logs = new logger(`${global.APPCONF.logsDir}/`, appName)
 ipcMain.on('log', (e, arg) =>       { logs.log(arg.origin, arg.event, arg.message) })
 ipcMain.on('logError', (e, arg) =>  { logs.error(arg.origin, arg.error, arg.message) })
 

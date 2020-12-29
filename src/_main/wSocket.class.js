@@ -89,8 +89,8 @@ class wSocket {
             _this.check()
 
             // Error Modal
-            modalBox('socketError', 'error', 'ERROR DE CONEXIÓN', `Conectando a ${remote.getGlobal('appConf').server.ip}`)
-            this.logError({origin: 'TURNOMATIC', error: 'OFFLINE', message: `Conectando a ${remote.getGlobal('appConf').server.ip}`})
+            modalBox('socketError', 'error', 'ERROR DE CONEXIÓN', `Conectando a ${this.ip}`)
+            this.logError({origin: 'TURNOMATIC', error: 'OFFLINE', message: `Conectando a ${this.ip}`})
         }, 5000)
       }
 }

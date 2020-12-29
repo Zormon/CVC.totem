@@ -1,27 +1,29 @@
-var prefs = window.ipc.get.appConf()
+var CONF = window.ipc.get.appConf()
 
 function savePreferences() {
-    prefs.contentDir = $('contentDir').value
-    prefs.logsDir = $('logsDir').value
+    CONF.contentDir = $('contentDir').value
+    CONF.logsDir = $('logsDir').value
 
-    prefs.server.ip =   $('serverIp').value != ''? $('serverIp').value : $('serverIp').placeholder
-    prefs.server.port = parseInt( $('serverPort').value != ''? $('serverPort').value : $('serverPort').placeholder )
-    prefs.printer.type = parseInt($('printerType').value)
-    prefs.printer.ip =  $('printerIp').value != ''? $('printerIp').value : $('printerIp').placeholder
-    prefs.printer.port = parseInt( $('printerPort').value != ''? $('printerPort').value : $('printerPort').placeholder )
+    CONF.server.ip =   $('serverIp').value != ''? $('serverIp').value : $('serverIp').placeholder
+    CONF.server.port = parseInt( $('serverPort').value != ''? $('serverPort').value : $('serverPort').placeholder )
+    CONF.printer.type = parseInt($('printerType').value)
+    CONF.printer.disabled = $('printDisable').checked
+    CONF.printer.ip =  $('printerIp').value != ''? $('printerIp').value : $('printerIp').placeholder
+    CONF.printer.port = parseInt( $('printerPort').value != ''? $('printerPort').value : $('printerPort').placeholder )
+    CONF.printer.ticket.width = parseInt( $('ticketWidth').value != ''? $('ticketWidth').value : $('ticketWidth').placeholder )
 
-    prefs.window.type = parseInt($('windowType').value)
-    prefs.window.sizeX = parseInt( $('windowSizeX').value != ''? $('windowSizeX').value : $('windowSizeX').placeholder )
-    prefs.window.sizeY = parseInt( $('windowSizeY').value != ''? $('windowSizeY').value : $('windowSizeY').placeholder )
-    prefs.window.posX = parseInt( $('windowPosX').value != ''? $('windowPosX').value : $('windowPosX').placeholder )
-    prefs.window.posY = parseInt( $('windowPosY').value != ''? $('windowPosY').value : $('windowPosY').placeholder )
+    CONF.window.type = parseInt($('windowType').value)
+    CONF.window.height = parseInt( $('windowHeight').value != ''? $('windowHeight').value : $('windowHeight').placeholder )
+    CONF.window.width = parseInt( $('windowWidth').value != ''? $('windowWidth').value : $('windowWidth').placeholder )
+    CONF.window.posX = parseInt( $('windowPosX').value != ''? $('windowPosX').value : $('windowPosX').placeholder )
+    CONF.window.posY = parseInt( $('windowPosY').value != ''? $('windowPosY').value : $('windowPosY').placeholder )
 
     // Imagen de logo
     if (typeof $('printFooter').files[0] != 'undefined') {
-        prefs.printLogo = {name: 'printFooter.png', file: $('canvasFooter').toDataURL("image/png").substring(22)}
+        CONF.printLogo = {name: 'printFooter.png', file: $('canvasFooter').toDataURL("image/png").substring(22)}
     }
 
-    window.ipc.save.appConf( prefs )
+    window.ipc.save.appConf( CONF )
 }
 
 function canvasThumb(event, canvas, width, height) {
@@ -80,35 +82,37 @@ $('printerType').onchange = (e) => {
 $('windowType').onchange = (e) => { 
     switch (e.currentTarget.value) {
         case '0': //Fullscreen
-            $('windowSizeX').disabled = true;  $('windowSizeY').disabled = true
+            $('windowWidth').disabled = true;  $('windowHeight').disabled = true
             $('windowPosX').disabled = true;  $('windowPosY').disabled = true
         break
 
         case '1': // Sin bordes
-            $('windowSizeX').disabled = false;  $('windowSizeY').disabled = false
+            $('windowWidth').disabled = false;  $('windowHeight').disabled = false
             $('windowPosX').disabled = false;  $('windowPosY').disabled = false
         break
 
         case '2': // Normal
-            $('windowSizeX').disabled = false;  $('windowSizeY').disabled = false
+            $('windowWidth').disabled = false;  $('windowHeight').disabled = false
             $('windowPosX').disabled = true;  $('windowPosY').disabled = true
     }
 }
 
 // Initialization
-$('contentDir').value = prefs.contentDir
-$('logsDir').value = prefs.logsDir
-$('serverIp').value = prefs.server.ip
-$('serverPort').value = prefs.server.port
-$('printerType').value = prefs.printer.type
-$('printerIp').value = prefs.printer.ip
-$('printerPort').value = prefs.printer.port
+$('contentDir').value = CONF.contentDir
+$('logsDir').value = CONF.logsDir
+$('serverIp').value = CONF.server.ip
+$('serverPort').value = CONF.server.port
+$('printerType').value = CONF.printer.type
+$('printDisable').checked = CONF.printer.disabled
+$('printerIp').value = CONF.printer.ip
+$('printerPort').value = CONF.printer.port
+$('ticketWidth').value = CONF.printer.ticket.width
 
-$('windowType').value = prefs.window.type
-$('windowSizeX').value = prefs.window.sizeX
-$('windowSizeY').value = prefs.window.sizeY
-$('windowPosX').value = prefs.window.posX
-$('windowPosY').value = prefs.window.posY
+$('windowType').value = CONF.window.type
+$('windowWidth').value = CONF.window.width
+$('windowHeight').value = CONF.window.height
+$('windowPosX').value = CONF.window.posX
+$('windowPosY').value = CONF.window.posY
 
 const event = new Event('change')
 $('windowType').dispatchEvent(event)
