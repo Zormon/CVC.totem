@@ -40,9 +40,9 @@ class Printer {
 
         switch (this.type) {
             case 0: //ePOS printer
-            const raster = this.toMonoImage( imageData )
+                const raster = this.toMonoImage( imageData )
                 let printData = '<?xml version="1.0" encoding="utf-8"?><s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"><s:Body><epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">'
-                printData += `<image width="${this.width}" height="${this.height}" color="color_1" mode="mono">${btoa(raster)}</image>`
+                printData += `<image width="${canvas.width}" height="${canvas.height}" color="color_1" mode="mono">${btoa(raster)}</image>`
                 printData += '<cut type="feed" />'
                 printData += '</epos-print></s:Body></s:Envelope>'
                 if (!this.disabled) { navigator.sendBeacon(this.url, new Blob([printData], {type:'text/plain'})) }
