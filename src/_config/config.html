@@ -68,14 +68,8 @@
             </div>
 
             <div>
-              <label for="ticketWidth">Ancho del ticket</label>
-              <select id="ticketWidth">
-                <option value="200">200 px</option>
-                <option value="300">300 px</option>
-                <option value="500">500 px (default)</option>
-                <option value="600">600 px</option>
-                <option value="700">700 px</option>
-              </select>
+              <label for="ticketWidth">Ancho del ticket (px)</label>
+              <input type="text" id="ticketWidth" placeholder="210">
             </div>
 
             <div>
@@ -84,7 +78,7 @@
             </div>
   
             <div>
-              <label for="printFooter">Pie de pagina de ticket (240px x 60px)</label>
+              <label for="printFooter">Pie de pagina de ticket (240px ancho)</label>
               <input type="file" id="printFooter" accept="image/png">
             </div>
             <div><canvas id="canvasFooter"></canvas></div>

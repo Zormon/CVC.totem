@@ -193,7 +193,7 @@ var appWin; var configWin; var configServerWin; var configUIWin;
     appWin.on('closed', () => { logs.log('MAIN','QUIT',''); app.quit() })
 
     logs.log('MAIN','START','')
-    //appWin.webContents.openDevTools()
+    appWin.webContents.openDevTools()
   }
 
   function config() {
@@ -262,11 +262,17 @@ ipcMain.on('printPage', (e, page) => {
   var printOptions = { 
     silent: true, printBackground: true
   }
-  let printWin = new BrowserWindow({ show: false, webPreferences: {contextIsolation: true}})
+  let printWin = new BrowserWindow({ show: false, type:'toolbar', webPreferences: {contextIsolation: true}})
+  printWin.setMenu(null)
   printWin.loadURL("data:text/html;charset=utf-8," + encodeURI(page))
 
   printWin.webContents.on('did-finish-load', () => {
       if (!global.APPCONF.printer.ticket.disabled) { printWin.webContents.print(printOptions) }
+      else  {
+        printWin.setBounds( {width: Math.round(global.APPCONF.printer.ticket.width * 1.1), height: Math.round(global.APPCONF.printer.ticket.width * 1.3)})
+        printWin.show()
+        setTimeout( ()=>{ printWin.close() }, 4000)
+      }
   })
 })
 

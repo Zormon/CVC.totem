@@ -27,15 +27,14 @@ class Printer {
         
         let canvas = document.createElement('canvas'); canvas.className = 'ticket'
         let ctx = canvas.getContext("2d")
-        canvas.width = this.width; canvas.height = canvas.width
+        canvas.width = 300; canvas.height = 240 + this.footer.height
         ctx.textAlign = "center"
         // Cola
-        ctx.font = `bold ${Math.floor(canvas.width*.1)}px Arial`; ctx.fillText(cola, Math.floor(canvas.width*.5), Math.floor(canvas.height*.15))
+        ctx.font = `bold 40px Arial`; ctx.fillText(cola, 150, 50)
         // Numero
-        ctx.font = `bold ${Math.floor(canvas.width*.6)}px Arial` ; ctx.fillText(numero, Math.floor(canvas.width*.5), Math.floor(canvas.height*.7))
+        ctx.font = `bold 200px Arial` ; ctx.fillText(numero, 150, 220)
         // footer
-        const footerRatio = this.footer.width / this.footer.height
-        ctx.drawImage( this.footer, canvas.width*.1, canvas.width*.75, canvas.width*.7, canvas.width*.7/footerRatio )
+        ctx.drawImage( this.footer, 40, 250 )
         const imageData = ctx.getImageData(0,0,canvas.width,canvas.height)
 
         switch (this.type) {
@@ -49,9 +48,9 @@ class Printer {
             break
             case 1: // Usb
                 let printPage = '<!DOCTYPE html><html><head><title></title>'
-                printPage += '<style>body, html { margin:0; padding:0; } img { width: 100vw; }</style>'
+                printPage += `<style>body, html { margin:0; padding:0; }</style>`
                 printPage += '</head><body>'
-                printPage += `<img src="${canvas.toDataURL("image/png")}">`
+                printPage += `<img width="${this.width}" src="${canvas.toDataURL("image/png")}">`
                 printPage += '</body></html>'
                 this.printPage(printPage)
             break
