@@ -3,12 +3,15 @@
   <head>
     <meta charset="utf-8">
     <title>Configuracion del servidor</title>
-    <script src="../preload.web.js"></script>
-    <script src="../_configServer/configServer.js" defer></script>
+    <script type="module" src="../_configServer/configServer.js"></script>
     <link rel="stylesheet" href="../res/config.css">
   </head>
   <body class="config">
       <form id="config">       
+        <div>
+          <input type="checkbox" id="pan">
+          <label for="pan">Aviso de pan</label>
+        </div>
         <div class="colas">
           <label for="ncolas">Colas</label>
           <select id="ncolas">
@@ -25,5 +28,15 @@
         <button id="save">Aplicar</button>
       </form>
 
+      <template id="icons">
+        <option value="0">&nbsp;</option>
+        <option value="1">&#xE200;</option>
+        <option value="2">&#xE201;</option>
+        <option value="3">&#xE202;</option>
+        <option value="4">&#xE203;</option>
+        <option value="5">&#xE204;</option>
+        <option value="6">&#xE205;</option>
+        <option value="7">&#xE206;</option>
+      </template>
   </body>
 </html>

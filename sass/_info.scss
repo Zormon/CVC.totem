@@ -3,11 +3,11 @@ body {
         display: flex;
         align-items: center;
         background: white;
-
+    
         > * {
             overflow: hidden;
         }
-
+    
         > *:nth-child(1) { // Time
             flex: 1;
             color: var(--secondary-color);
@@ -20,11 +20,11 @@ body {
             flex: 2;
         }
     }
-
+    
     &.vertical {
         #info {
             > * { padding: 0 2vw; }
-
+    
             > *:nth-child(1) { // Time
                 font-size: 7vw;
                 line-height: 1em;
@@ -34,11 +34,11 @@ body {
             }
             > *:nth-child(3) { // Logo Cliente
                 width: 20vw;
-
+    
             }
         }
     }
-
+    
     &.horizontal {
         #info {
             padding: 0 .4vh;
@@ -51,8 +51,43 @@ body {
             }
             > *:nth-child(3) { // Logo Cliente
                 width: 20vw;
-
+    
             }
+        }
+    }
+    
+    
+    .modalBox {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100vw; height: 100vh;
+        display: flex;
+        text-align: center;
+        z-index: 3;
+        justify-content: center;
+        background: linear-gradient( to bottom, black 10%, transparent 50% ); 
+        align-items: center;
+        
+    
+        > div {
+            color: black;
+            background: white;
+            border-radius: 10px;
+            font-size: .8em;
+            padding: 2vw;
+    
+            .header { font-size: 4vw; }
+            .texto  { font-size: 2vw;}
+        }
+    
+        &.error div { box-shadow: 0 0 20px 0 red; }
+        &.info div { box-shadow: 0 0 20px 0 darkblue; }
+        &.print div { box-shadow: 0 0 20px 0 darkgreen; }
+    }
+    
+    &.vertical {
+        .modalBox > div {
+            width: 80%;
         }
     }
 }

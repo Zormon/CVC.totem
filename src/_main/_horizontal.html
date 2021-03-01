@@ -5,16 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>totem</title>
   <link rel="stylesheet" href="../res/totem.css">+
-  <script src="../preload.web.js"></script>
-  <script src="../_main/printer.class.js" defer></script>
-  <script src="../_main/timer.class.js" defer></script>
-  <script src="../_main/content.class.js" defer></script>
-  <script src="../_main/wSocket.class.js" defer></script>
-  <script src="../_main/index.js" defer></script>
+  <script type="module" src="index.js"></script>
 </head>
 
 <body class="main horizontal">
-  <div id="header">Pulse para imprimir</div>
+  <div id="header"><i class="icon-down"></i>&nbsp;&nbsp;&nbsp;Pulse para imprimir&nbsp;&nbsp;&nbsp;<i class="icon-down"></i></div>
   <div id="tickets"></div>
   <div id="media"></div>
 
@@ -24,5 +19,15 @@
     <img class="item" src="../../files/logoCliente.png">
   </div>
 
+
+  
+  <template id="msgPrinting">
+    <h1 data-tpl="header"></h1>
+    <p data-tpl="texto"></p>
+  </template>
+  <template id="msgBox">
+    <h1 data-tpl="header"></h1>
+    <p data-tpl="texto"></p>
+  </template>
 </body>
 </html>

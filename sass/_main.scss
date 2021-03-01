@@ -1,4 +1,4 @@
-* { box-sizing: content-box; outline: none; }
+* { box-sizing: content-box; outline: none; cursor: none; }
 
 body.main {
     position: relative;
@@ -6,7 +6,6 @@ body.main {
     font-family: sans-serif;
     font-weight: bold;
     padding: 0; margin: 0;
-    cursor: none;
     background: white;
     /* Para evitar saltos en reflow*/
     overflow: hidden;
@@ -15,38 +14,7 @@ body.main {
 
     *::selection { background: none; }
 
-    .modalBox {
-        position: fixed;
-        top: 0; left: 0;
-        width: 100vw; height: 100vh;
-        display: flex;
-        text-align: center;
-        z-index: 3;
-        justify-content: center;
-        background: linear-gradient( to bottom, black 10%, transparent 50% ); 
-        align-items: baseline;
-        padding-top: 30vw;
-        
-
-        > div {
-            color: black;
-            background: white;
-            border-radius: 10px;
-            font-size: .8em;
-        }
-
-        &.error div { box-shadow: 0 0 20px 0 red; }
-        &.info div { box-shadow: 0 0 20px 0 darkblue; }
-        &.print div { box-shadow: 0 0 20px 0 darkgreen; }
-    }
-
-    &.vertical {
-        .modalBox > div {
-            width: 80%;
-        }
-    }
-
-    #tickets { overflow: visible;}
+    #tickets { overflow: visible; }
 
     #media {
         width: 100%;

@@ -1,3 +1,5 @@
+import {iconNames, $, $$, modalBox} from '../exports.web.js'
+
 class wSocket {
     constructor(conf, exColas, printer, logger) {
         this.ip = conf.ip
@@ -46,12 +48,12 @@ class wSocket {
 
         document.body.className = document.body.className.split(' ').filter(c=>!c.startsWith('ncolas-')).join(" ").trim()
 
-        let ncolas = 0
+        let ncolas = 0, nombre, tik, turno, icon
         for (let i=0; i < colas.length; i++) {
             if ( this.exColas.indexOf(i+1) == -1 ) { 
                 ncolas++
                 // Tickets
-                let ticket = document.createElement('div'); ticket.id =  `ticket${i}`;
+                let ticket = document.createElement('button'); ticket.id =  `ticket${i}`;
                 ticket.style = `background:linear-gradient(to bottom, ${colas[i].color}, ${colas[i].color}AA); color:${colas[i].color};`
                 ticket.dataset.id = i
                 ticket.onclick = ()=> {
@@ -59,10 +61,12 @@ class wSocket {
                         this.printer.printTicket(colas[i].nombre, data)
                     })
                 }
-                let nombre = document.createElement('span'); nombre.className = 'nombre'; nombre.textContent = colas[i].nombre
-                let tik = document.createElement('span'); tik.className = 'num'; tik.textContent = tickets[i].num
-                let turno = document.createElement('span'); turno.className = 'turno'; turno.id =  `cola${i}`; turno.textContent = turnos[i].num
-                ticket.appendChild(nombre); ticket.appendChild(tik); ticket.appendChild(turno)
+                nombre = document.createElement('span'); nombre.className = 'nombre'; nombre.textContent = colas[i].nombre
+                tik = document.createElement('span'); tik.className = 'num'; tik.textContent = tickets[i].num
+                turno = document.createElement('span'); turno.className = 'turno'; turno.id =  `cola${i}`; turno.textContent = turnos[i].num
+                icon = document.createElement('i'); icon.className = `icon-${iconNames[colas[i].icon]}`
+                ticket.appendChild(nombre); ticket.appendChild(tik); ticket.appendChild(icon)
+                //ticket.appendChild(turno);
                 divTickets.appendChild(ticket)
             }
         }
@@ -89,8 +93,10 @@ class wSocket {
             _this.check()
 
             // Error Modal
-            modalBox('socketError', 'error', 'ERROR DE CONEXIÓN', `Conectando a ${this.ip}`)
+            modalBox('socketError', 'msgBox', 'ERROR DE CONEXIÓN', `Conectando a ${this.ip}`)
             this.logError({origin: 'TURNOMATIC', error: 'OFFLINE', message: `Conectando a ${this.ip}`})
         }, 5000)
       }
 }
+
+export default wSocket

@@ -1,3 +1,5 @@
+import {$} from '../exports.web.js'
+
 var CONF = window.ipc.get.appConf()
 
 function savePreferences() {

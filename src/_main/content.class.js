@@ -1,3 +1,5 @@
+import {$} from '../exports.web.js'
+import Timer from './timer.class.js'
 
 const FADE_DURATION = 0.25
 
@@ -110,3 +112,5 @@ class Content {
         })
       }
 }
+
+export default Content

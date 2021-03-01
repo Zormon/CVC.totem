@@ -1,21 +1,23 @@
-const prefs = window.ipc.get.appConf()
+import {$, $$$} from '../exports.web.js'
+
+var CONF = window.ipc.get.appConf()
 var colas = {}
 
 async function saveConfig() {
     let cols = []
     $$$('#colas div.cola').forEach(el => { 
-        let col = {'nombre': el.children[0].value, 'color': el.children[1].value}
+        let col = {'nombre': el.children[0].value, 'color': el.children[1].value, 'icon': el.children[2].value}
         cols.push( col ) 
     })
 
-    let data = await fetch(`http://${prefs.server.ip}:${prefs.server.port}/setColas`, {
+    // Set Colas
+    let data = await fetch(`http://${CONF.server.ip}:${CONF.server.port}/setConfig`, {
         method: 'POST', headers: { 'Accept': 'application/json', 'Content-Type': 'application/json'},
-        body: JSON.stringify( cols )
+        body: JSON.stringify( { pan: $('pan').checked, colas: cols } )
       }).then( resp => resp.json() )
-    
+    if (data.status!='ok')      { return data.error }
 
-    if (data.status=='ok')      { return true }
-    else                        { return data.error }
+    return true
 }
 
 function printColas() {
@@ -24,11 +26,9 @@ function printColas() {
     for (let i=0; i< $('ncolas').value; i++) {
         let nombre = document.createElement('input')
         let color = document.createElement('input')
+        let icon = document.createElement('select')
         let cola = document.createElement('div')
         cola.className = 'cola'
-
-        if (typeof colas[i] != 'undefined')         { nombre.value = colas[i].nombre;   color.value = colas[i].color }
-        else                                        { nombre.value = `Cola ${i+1}`;     color.value = '#000' }
 
         // Nombre
         nombre.type = 'text'
@@ -39,17 +39,27 @@ function printColas() {
         // Color
         color.type = 'color'
         color.required = 'true'
-
+        
+        // Icon
+        icon.className = 'icon'
+        let tpl = $('icons').content.cloneNode(true)
+        icon.appendChild(tpl)
+        
+        if (typeof colas[i] != 'undefined')         { nombre.value = colas[i].nombre;   color.value = colas[i].color;   icon.selectedIndex = colas[i].icon }
+        else                                        { nombre.value = `Cola ${i+1}`;     color.value = '#000';           icon.selectedIndex = 0 }
         cola.appendChild(nombre)
         cola.appendChild(color)
+        cola.appendChild(icon)
         divColas.appendChild(cola)
     }
 }
 
 
 // Initialization
-fetch(`http://${prefs.server.ip}:${prefs.server.port}/getColas`).then( resp => resp.json() )
+fetch(`http://${CONF.server.ip}:${CONF.server.port}/getConfig`).then( resp => resp.json() )
 .then( (data)=> {
+        $('pan').checked = data.pan
+
         $('ncolas').value = data.colas.length
         colas = data.colas
         printColas()
@@ -58,12 +68,7 @@ fetch(`http://${prefs.server.ip}:${prefs.server.port}/getColas`).then( resp => r
 
         $('save').onclick = async(e)=> {
             e.preventDefault()
-            if ( $('config').checkValidity() ) {
-                if ( await saveConfig() == true) {
-                    remote.getCurrentWindow().close()           
-                }
-            } else { 
-                $('config').reportValidity()
-            }
+            if ( $('config').checkValidity() ) { saveConfig() }
+            else { $('config').reportValidity() }
         }
 })

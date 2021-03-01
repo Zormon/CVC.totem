@@ -1,3 +1,8 @@
+import wSocket from './wSocket.class.js'
+import Content from './content.class.js'
+import Printer from './printer.class.js'
+import {$} from '../exports.web.js'
+
 const conf = window.ipc.get.appConf()
 const ui = window.ipc.get.interface()
 
@@ -11,23 +16,6 @@ const ui = window.ipc.get.interface()
 function time() {
   let date = new Date
   $('time').textContent = date.getHours().toString().padStart(2,'0') + ':' + date.getMinutes().toString().padStart(2,'0')
-}
-
-function modalBox(id, type, header='', msg='') {
-  if ( type ) { // Añadir
-    if (!document.contains( $(id) )) {
-      let modal = document.createElement('div')
-      modal.id = id
-      modal.className = `modalBox ${type}`
-      modal.innerHTML = `<div><h1>${header}</h1><p>${msg}</p></div>`    
-      document.body.appendChild(modal)
-    } else {
-        $$(`#${id} > div > h1`).textContent = header
-        $$(`#${id} > div > p`).textContent = msg
-    }
-  } else { // Si type es falso, es que se quiere destruir el modal
-    try { $(id).remove()} catch(e){}
-  }
 }
 
 /*=====  End of Funciones  ======*/
@@ -67,7 +55,6 @@ time()
 setInterval(time, 5000)
 
 /*=====  End of MAIN  ======*/
-
 
 
 

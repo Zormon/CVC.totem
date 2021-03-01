@@ -1,3 +1,5 @@
+import {modalBox, sleep} from '../exports.web.js'
+
 class Printer {
     constructor(conf, ipc) {
         this.type = conf.type
@@ -22,7 +24,7 @@ class Printer {
     }
 
     async printTicket(cola, numero) {
-        modalBox('printing', 'print', `Imprimiendo ticket ${numero} para ${cola}`, 'Recoja su ticket debajo')
+        modalBox('printing', 'msgPrinting', [['header','Imprimiendo Ticket'],['texto',`Recoja su número <strong>${numero}</strong> de <em>${cola}</em> debajo`]], 'printing', false )
         this.log({origin: 'PRINT', event: 'TICKET', message: `Imprimiendo ticket ${numero} de cola ${cola}`})
         
         let canvas = document.createElement('canvas'); canvas.className = 'ticket'
@@ -90,15 +92,15 @@ class Printer {
                             this.logError({origin: 'PRINT', error: 'UNKNOWN', message:  errorText})
                         break;
                     }
-                    modalBox('printError', 'error', 'ERROR DE IMPRESORA', errorText)
+                    modalBox('printError', 'msgBox', [['header','ERROR DE IMPRESORA'],['texto',errorText]], 'error', false )
                 }
             }).catch((e)=> {
-                modalBox('printError', 'error', 'ERROR DE RED', 'No se puede acceder a la red')
+                modalBox('printError', 'msgBox', [['header','ERROR DE RED'],['texto', e.message]], 'error', false )
                 this.logError({origin: 'NETWORK', error: 'NETWORK_UNREACHABLE', message: e.message})
              })
             .finally(()=>{ this.fetching = false })
         } else {
-            modalBox('printError', 'error', 'ERROR DE IMPRESORA', 'La impresora no responde')
+            modalBox('printError', 'msgBox', [['header','ERROR DE IMPRESORA'],['texto', 'La impresora no responde']], 'error', false )
             this.logError({origin: 'PRINT', error: 'OFFLINE', message: `${this.ip}:${this.port}`})
         }
       }
@@ -134,3 +136,6 @@ class Printer {
         return r.join('')
     }
 }
+
+
+export default Printer

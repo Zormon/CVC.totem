@@ -20,3 +20,5 @@ class Timer {
         window.clearTimeout(this.timerId)
     }
 }
+
+export default Timer

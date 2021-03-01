@@ -88,6 +88,14 @@ body.config {
         width: 90%; 
         display: block;
 
+        &.icon {
+            width: 20%;
+            margin: 0 0 0 1em;
+            font-family: 'CVC Icons';
+            padding: 0;
+            font-size: 2em;
+        }
+
         &:hover { border-color: darken($light-color, 50%); }
 
         &:focus { border-color: $main-color; }
