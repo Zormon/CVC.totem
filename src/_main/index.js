@@ -43,7 +43,7 @@ document.adoptedStyleSheets = [css]
 
 var content = new Content(conf.contentDir, window.ipc.logger )
 content.updatePlaylist().then( ()=> { content.next() })
-setInterval('content.updatePlaylist()', 60000) // 60 seconds
+setInterval(()=>{ content.updatePlaylist() }, 20000) // 20 seconds
 
 var printer = new Printer(conf.printer, { printer: window.ipc.printer, logger: window.ipc.logger })
 printer.init()
