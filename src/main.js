@@ -5,6 +5,7 @@ const path = require('path')
 const logger = require('./log.js')
 const isLinux = process.platform === "linux"
 const restartCommandShell =  `~/system/scripts/appsCvc restart ${appName} &`
+app.commandLine.appendSwitch('touch-events', 'enabled')
 
 var appWin; var configWin; var configServerWin; var configUIWin;
 

@@ -56,11 +56,15 @@ class wSocket {
                 let ticket = document.createElement('button'); ticket.id =  `ticket${i}`;
                 ticket.style = `background:linear-gradient(to bottom, ${colas[i].color}, ${colas[i].color}AA); color:${colas[i].color};`
                 ticket.dataset.id = i
-                ticket.onclick = ()=> {
+                ticket.ontouchstart = async (e)=> {
+                    e.currentTarget.classList.add('touched')
+                }
+                ticket.ontouchend = (e)=> { 
+                    e.currentTarget.classList.remove('touched')
                     fetch(`http://${this.ip}:${this.port}/ticket/${i}`).then(resp => resp.text()).then( (data)=> {
                         this.printer.printTicket(colas[i].nombre, data)
                     })
-                }
+                 }
                 nombre = document.createElement('span'); nombre.className = 'nombre'; nombre.textContent = colas[i].nombre
                 tik = document.createElement('span'); tik.className = 'num'; tik.textContent = tickets[i].num
                 turno = document.createElement('span'); turno.className = 'turno'; turno.id =  `cola${i}`; turno.textContent = turnos[i].num

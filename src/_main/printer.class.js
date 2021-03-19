@@ -95,7 +95,7 @@ class Printer {
                     modalBox('printError', 'msgBox', [['header','ERROR DE IMPRESORA'],['texto',errorText]], 'error', false )
                 }
             }).catch((e)=> {
-                modalBox('printError', 'msgBox', [['header','ERROR DE RED'],['texto', e.message]], 'error', false )
+                modalBox('printError', 'msgBox', [['header','ERROR DE IMPRESORA'],['texto', e.message]], 'error', false )
                 this.logError({origin: 'NETWORK', error: 'NETWORK_UNREACHABLE', message: e.message})
              })
             .finally(()=>{ this.fetching = false })

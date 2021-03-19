@@ -22,7 +22,7 @@
         font-family: inherit;
         overflow: hidden;
 
-        &:active { 
+        &.touched { 
             filter: brightness(1.2);
             transform: scale(.95);
         }
