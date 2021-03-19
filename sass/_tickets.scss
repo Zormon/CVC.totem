@@ -22,11 +22,6 @@
         font-family: inherit;
         overflow: hidden;
 
-        &.touched { 
-            filter: brightness(1.2);
-            transform: scale(.95);
-        }
-
         .num {
             display: block;
             color: white;
