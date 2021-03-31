@@ -48,7 +48,7 @@ setInterval(()=>{ content.updatePlaylist() }, 20000) // 20 seconds
 var printer = new Printer(conf.printer, { printer: window.ipc.printer, logger: window.ipc.logger })
 printer.init()
 
-var ws = new wSocket(conf.server, ui.exColas, printer, window.ipc.logger )
+var ws = new wSocket(conf, ui.exColas, printer, window.ipc.logger )
 ws.init()
 
 time()

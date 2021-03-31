@@ -5,7 +5,6 @@ const path = require('path')
 const logger = require('./log.js')
 const isLinux = process.platform === "linux"
 const restartCommandShell =  `~/system/scripts/appsCvc restart ${appName} &`
-app.commandLine.appendSwitch('touch-events', 'enabled')
 
 var appWin; var configWin; var configServerWin; var configUIWin;
 
@@ -26,6 +25,7 @@ var appWin; var configWin; var configServerWin; var configUIWin;
       port: 3000,
     },
     printer: {
+      touch: true,
       type: 0,
       ip:'192.168.1.241',
       port: 8008,
@@ -55,7 +55,10 @@ var appWin; var configWin; var configServerWin; var configUIWin;
   }
 
   if ( !(global.APPCONF = loadConfigFile(CONFIG_FILE)) )      { global.APPCONF = DEFAULT_CONFIG }
-  if ( !(global.UI = loadConfigFile(CONFIGUI_FILE)) )  { global.UI = DEFAULT_UI }
+  if ( !(global.UI = loadConfigFile(CONFIGUI_FILE)) )         { global.UI = DEFAULT_UI }
+
+  if (global.APPCONF.touch)   { app.commandLine.appendSwitch('touch-events', 'enabled') }
+
 
 /*=====  End of Preferencias  ======*/
 
@@ -198,7 +201,7 @@ var appWin; var configWin; var configServerWin; var configUIWin;
   }
 
   function config() {
-    configWin = new BrowserWindow({width: 720, height: 520, show:false, alwaysOnTop: true, webPreferences: { contextIsolation: true, preload: path.join(__dirname, "preload.js"), parent: appWin }})
+    configWin = new BrowserWindow({width: 720, height: 550, show:false, alwaysOnTop: true, webPreferences: { contextIsolation: true, preload: path.join(__dirname, "preload.js"), parent: appWin }})
     configWin.loadFile(`${__dirname}/_config/config.html`)
     configWin.setMenu( null )
     configWin.resizable = false

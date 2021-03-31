@@ -3,6 +3,7 @@ import {$} from '../exports.web.js'
 var CONF = window.ipc.get.appConf()
 
 function savePreferences() {
+    CONF.touch = $('touch').checked
     CONF.contentDir = $('contentDir').value
     CONF.logsDir = $('logsDir').value
 
@@ -100,7 +101,8 @@ $('windowType').onchange = (e) => {
 }
 
 // Initialization
-$('contentDir').value = CONF.contentDir
+$('touch').checked = CONF.touch
+$('contentDir').value = CONF.contentDir 
 $('logsDir').value = CONF.logsDir
 $('serverIp').value = CONF.server.ip
 $('serverPort').value = CONF.server.port

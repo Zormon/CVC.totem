@@ -2,12 +2,14 @@ import {iconNames, $, $$, modalBox} from '../exports.web.js'
 
 class wSocket {
     constructor(conf, exColas, printer, logger) {
-        this.ip = conf.ip
-        this.port = conf.port
+        this.ip = conf.server.ip
+        this.port = conf.server.port
         this.exColas = exColas
         this.printer = printer
         this.log = logger.std
         this.logError = logger.error
+
+        this.printEvent = conf.touch? 'ontouchstart' : 'onmousedown'
     }
 
     init() {
@@ -56,7 +58,7 @@ class wSocket {
                 let ticket = document.createElement('button'); ticket.id =  `ticket${i}`;
                 ticket.style = `background:linear-gradient(to bottom, ${colas[i].color}, ${colas[i].color}AA); color:${colas[i].color};`
                 ticket.dataset.id = i
-                ticket.ontouchstart = (e)=> { 
+                ticket[this.printEvent] = (e)=> { 
                     fetch(`http://${this.ip}:${this.port}/ticket/${i}`).then(resp => resp.text()).then( (data)=> {
                         this.printer.printTicket(colas[i].nombre, data)
                     })
