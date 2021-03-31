@@ -65,7 +65,7 @@ body {
         text-align: center;
         z-index: 3;
         justify-content: center;
-        background: linear-gradient( to bottom, black 10%, transparent 50% ); 
+        background-color: #0009; 
         align-items: center;
         
     
@@ -73,11 +73,11 @@ body {
             color: black;
             background: white;
             border-radius: 10px;
-            font-size: .8em;
             padding: 2vw;
-    
-            .header { font-size: 4vw; }
-            .texto  { font-size: 2vw;}
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
     
         &.error div { box-shadow: 0 0 20px 0 red; }
@@ -86,8 +86,28 @@ body {
     }
     
     &.vertical {
-        .modalBox > div {
-            width: 80%;
+        .modalBox.printing > div {
+            position: relative;
+            width: 90%;
+            min-height: 30vh;
+            top: -15vh;
+            animation: slide-down .3s;
+
+            .header { font-size: 8vw; }
+            .texto  { font-size: 4vw;}
+        }
+    }
+
+    &.horizontal {
+        .modalBox.printing > div {
+            position: relative;
+            width: 45%;
+            min-height: 60vh;
+            animation: slide-right .3s;
+            left: -24vw;
+
+            .header { font-size: 8vh; }
+            .texto  { font-size: 4vh;}
         }
     }
 }

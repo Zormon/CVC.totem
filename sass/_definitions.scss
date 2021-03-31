@@ -6,22 +6,14 @@ $light-color: white;
 $dark-color: black;
 
 
-@keyframes fade-in {
-    from { opacity: 0; }
-    to { opacity: 1;}
+@keyframes slide-down {
+    from    { transform: translateY(-170%); }
+    to      { transform: translateY(0%); }
 }
 
-@keyframes zoom-in {
-    0% {     
-        clip-path: circle(0 at 40% 40%);
-        opacity: 0;
-    }
-    40% {
-        opacity: 1;
-    }
-    100% {
-        clip-path: circle(60vw at 50% 50%);
-    }
+@keyframes slide-right {
+    from    { transform: translateX(-120%); }
+    to      { transform: translateX(0%); }
 }
 
 @font-face {

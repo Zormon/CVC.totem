@@ -24,7 +24,7 @@ class Printer {
     }
 
     async printTicket(cola, numero) {
-        modalBox('printing', 'msgPrinting', [['header','Imprimiendo Ticket'],['texto',`Recoja su número <strong>${numero}</strong> de <em>${cola}</em> debajo`]], 'printing', false )
+        modalBox('printing', 'msgPrinting', [['header','Imprimiendo Ticket'],['texto',`Recoja su número <strong>${numero}</strong> de <em>${cola}</em>`]], 'printing', false )
         this.log({origin: 'PRINT', event: 'TICKET', message: `Imprimiendo ticket ${numero} de cola ${cola}`})
         
         let canvas = document.createElement('canvas'); canvas.className = 'ticket'
