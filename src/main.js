@@ -197,11 +197,11 @@ var appWin; var configWin; var configServerWin; var configUIWin;
     appWin.on('closed', () => { logs.log('MAIN','QUIT',''); app.quit() })
 
     logs.log('MAIN','START','')
-    appWin.webContents.openDevTools()
+    //appWin.webContents.openDevTools()
   }
 
   function config() {
-    configWin = new BrowserWindow({width: 720, height: 550, show:false, alwaysOnTop: true, webPreferences: { contextIsolation: true, preload: path.join(__dirname, "preload.js"), parent: appWin }})
+    configWin = new BrowserWindow({width: 720, height: 550, show:false, parent: appWin, modal:true, webPreferences: { contextIsolation: true, preload: path.join(__dirname, "preload.js") }})
     configWin.loadFile(`${__dirname}/_config/config.html`)
     configWin.setMenu( null )
     configWin.resizable = false
@@ -213,7 +213,7 @@ var appWin; var configWin; var configServerWin; var configUIWin;
 
     // Ventana de personalizacion de interfaz
     function configUI() {
-      configUIWin = new BrowserWindow({width: 700, height: 460, show:false, alwaysOnTop: true, resizable: false, webPreferences: { contextIsolation: true, preload: path.join(__dirname, "preload.js"), parent: appWin }})
+      configUIWin = new BrowserWindow({width: 700, height: 460, show:false, parent: appWin, modal:true, resizable: false, webPreferences: { contextIsolation: true, preload: path.join(__dirname, "preload.js") }})
       configUIWin.loadFile(`${__dirname}/_configUI/configUI.html`)
       configUIWin.setMenu( null )
       configUIWin.show()
@@ -223,7 +223,7 @@ var appWin; var configWin; var configServerWin; var configUIWin;
     }
 
   function configServer() {
-    configServerWin = new BrowserWindow({width: 400, height: 550, show:false, alwaysOnTop: true, resizable: false, webPreferences: { contextIsolation: true, preload: path.join(__dirname, "preload.js"), parent: appWin }})
+    configServerWin = new BrowserWindow({width: 400, height: 550, show:false, parent: appWin, modal:true, resizable: false, webPreferences: { contextIsolation: true, preload: path.join(__dirname, "preload.js")}})
     configServerWin.loadFile(`${__dirname}/_configServer/configServer.html`)
     configServerWin.setMenu( null )
     configServerWin.show()
