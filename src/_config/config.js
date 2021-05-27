@@ -52,11 +52,8 @@ $('printFooter').onchange = (e) => {
 
 $('save').onclick = (e)=> {
     e.preventDefault()
-    if ( $('config').checkValidity() ) {
-        savePreferences()
-    } else { 
-        $('config').reportValidity()
-    }
+    if ( $('config').checkValidity() )  { savePreferences() }
+    else                                { $('config').reportValidity() }
 }
 
 $('contentDir').onclick = ()=> {

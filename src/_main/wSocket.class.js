@@ -50,12 +50,13 @@ class wSocket {
 
         document.body.className = document.body.className.split(' ').filter(c=>!c.startsWith('ncolas-')).join(" ").trim()
 
-        let ncolas = 0, nombre, tik, turno, icon
+        let ncolas = 0
         for (let i=0; i < colas.length; i++) {
             if ( this.exColas.indexOf(i+1) == -1 ) { 
                 ncolas++
+                let ticket, nombre, tik, turno, icon
                 // Tickets
-                let ticket = document.createElement('button'); ticket.id =  `ticket${i}`;
+                ticket = document.createElement('button'); ticket.id =  `ticket${i}`;
                 ticket.style = `background:linear-gradient(to bottom, ${colas[i].color}, ${colas[i].color}AA); color:${colas[i].color};`
                 ticket.dataset.id = i
                 ticket[this.printEvent] = (e)=> { 
@@ -65,10 +66,10 @@ class wSocket {
                  }
                 nombre = document.createElement('span'); nombre.className = 'nombre'; nombre.textContent = colas[i].nombre
                 tik = document.createElement('span'); tik.className = 'num'; tik.textContent = tickets[i].num
-                turno = document.createElement('span'); turno.className = 'turno'; turno.id =  `cola${i}`; turno.textContent = turnos[i].num
+                turno = document.createElement('span'); turno.className = 'turno'; turno.id =  `cola${i}`; turno.innerHTML = `Atendido: <span>${turnos[i].num}</span>`
                 icon = document.createElement('i'); icon.className = `icon-${iconNames[colas[i].icon]}`
-                ticket.appendChild(nombre); ticket.appendChild(tik); ticket.appendChild(icon)
-                //ticket.appendChild(turno);
+                ticket.appendChild(nombre); ticket.appendChild(tik); ticket.appendChild(turno)
+                ticket.appendChild(icon);
                 divTickets.appendChild(ticket)
             }
         }
@@ -77,7 +78,7 @@ class wSocket {
 
     update(cola, num) {
         try         { var mainNum = $$(`#cola${cola}`) } catch(e){return}
-        mainNum.textContent = num.toString()
+        mainNum.innerHTML = `Atendido: <span>${num.toString()}</span>`
     }
 
     updateTicket(cola, num) {
@@ -95,7 +96,7 @@ class wSocket {
             _this.check()
 
             // Error Modal
-            modalBox('socketError', 'msgBox', 'ERROR DE CONEXIÓN', `Conectando a ${this.ip}`)
+            modalBox('socketError', 'msgBox', [['header','ERROR DE CONEXIÓN'],['texto', `Conectando a ${this.ip}`]], 'error' )
             this.logError({origin: 'TURNOMATIC', error: 'OFFLINE', message: `Conectando a ${this.ip}`})
         }, 5000)
       }

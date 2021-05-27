@@ -2,32 +2,19 @@ import wSocket from './wSocket.class.js'
 import Content from './content.class.js'
 import Printer from './printer.class.js'
 import {$} from '../exports.web.js'
-
 const conf = window.ipc.get.appConf()
 const ui = window.ipc.get.interface()
 
-/*=============================================
-=            Funciones            =
-=============================================*/
 
-/**
- * Actualiza la hora basada en el sistema y la pinta en su contenedor
- */
+
 function time() {
   let date = new Date
   $('time').textContent = date.getHours().toString().padStart(2,'0') + ':' + date.getMinutes().toString().padStart(2,'0')
 }
 
-/*=====  End of Funciones  ======*/
-
-
-/*=============================================
-=            MAIN            =
-=============================================*/
 
 // Aplica CSS basado en la configuracion
 if (!ui.info) { document.body.classList.add('noInfo') }
-// Aplica estilos basados en la configuracion
 const css = new CSSStyleSheet()
 css.insertRule(` :root { --main-color: ${ui.colors.main};  } `)
 css.insertRule(` :root { --secondary-color: ${ui.colors.secondary}; } `)
@@ -54,20 +41,16 @@ ws.init()
 time()
 setInterval(time, 5000)
 
-/*=====  End of MAIN  ======*/
-
 
 
 // Atajos de teclado para testeo
 window.onkeyup = (e)=> {
   switch (e.keyCode) {
-    // Enter: Siguiente contenido
-    case 13:
+    case 13: // Enter: Siguiente contenido
       content.next()
       window.ipc.logger.std({origin: 'USER', event: 'SKIP_CONTENT', message: ''})
     break
-    // P: Pausa
-    case 80:
+    case 80: // P: Pausa
       content.togglePause()
     break
   }

@@ -92,15 +92,15 @@ class Printer {
                             this.logError({origin: 'PRINT', error: 'UNKNOWN', message:  errorText})
                         break;
                     }
-                    modalBox('printError', 'msgBox', [['header','ERROR DE IMPRESORA'],['texto',errorText]], 'error', false )
+                    modalBox('printError', 'msgBox', [['header','ERROR DE IMPRESORA'],['texto',errorText]], 'error' )
                 }
             }).catch((e)=> {
-                modalBox('printError', 'msgBox', [['header','ERROR DE IMPRESORA'],['texto', e.message]], 'error', false )
+                modalBox('printError', 'msgBox', [['header','ERROR DE IMPRESORA'],['texto', e.message]], 'error' )
                 this.logError({origin: 'NETWORK', error: 'NETWORK_UNREACHABLE', message: e.message})
              })
             .finally(()=>{ this.fetching = false })
         } else {
-            modalBox('printError', 'msgBox', [['header','ERROR DE IMPRESORA'],['texto', 'La impresora no responde']], 'error', false )
+            modalBox('printError', 'msgBox', [['header','ERROR DE IMPRESORA'],['texto', 'La impresora no responde']], 'error' )
             this.logError({origin: 'PRINT', error: 'OFFLINE', message: `${this.ip}:${this.port}`})
         }
       }
