@@ -3,56 +3,86 @@ body {
         display: flex;
         align-items: center;
         background: white;
+        position: relative;
     
         > * {
             overflow: hidden;
         }
+
+        #barProgress {
+            background: white;
+            width: 100%;
+            position: absolute;
+            top: 0;
+
+            > div {
+                background: var(--secondary-color);
+                width:100%; height: 100%;
+                transform-origin: 0 0;
+                transform: scaleX(0);
+            }
+        }
+
+        #barProgress > div.advance {
+            animation-name: advance;
+            animation-timing-function: linear;
+        }
     
-        > *:nth-child(1) { // Time
+        #time {
             flex: 1;
             color: var(--main-color);
             font-family: 'font';
         }
-        > *:nth-child(2) { // Imagen barra baja
-            flex: 2;
-        }
-        > *:nth-child(3) { // Logo Cliente
-            flex: 2;
+
+        img { 
+            &#barImage {
+                flex: 2;
+            }
+    
+            &#clientLogo {
+                flex: 2;
+            }
         }
     }
     
     &.vertical {
         #info {
-            > * { padding: 0 2vw; }
-    
-            > *:nth-child(1) { // Time
+            #barProgress { height: .3vh; }
+
+            #time {
                 font-size: 7vw;
                 line-height: 1em;
             }
-            > *:nth-child(2) { // Imagen barra baja
-                width: 20vw; 
-            }
-            > *:nth-child(3) { // Logo Cliente
-                width: 20vw;
-    
+
+            img { 
+                &#barImage {
+                    width: 20vw; 
+                }
+        
+                &#clientLogo {
+                    width: 20vw;
+                }
             }
         }
     }
     
     &.horizontal {
         #info {
-            padding: 0 .4vh;
-            > *:nth-child(1) { // Time
+            #barProgress { height: .3vw; }
+            #time {
                 font-size: 4vw;
                 line-height: 1em;
             }
-            > *:nth-child(2) { // Imagen barra baja
-                width: 20vw; 
+
+            img { 
+                &#barImage {
+                    width: 20vw; 
+                }
+        
+                &#clientLogo {
+                    width: 20vw;
+                }
             }
-            > *:nth-child(3) { // Logo Cliente
-                width: 20vw;
-    
-            }
-        }
+        }     
     }
 }

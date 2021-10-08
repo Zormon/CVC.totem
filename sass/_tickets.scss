@@ -23,6 +23,7 @@
         
         .nombre { 
             color: white; 
+            margin-top: 2vw;
             flex: 2; 
         }
         
@@ -54,160 +55,90 @@
 
 /* ==== REJILLAS BOTONES    */
 body {
-    /*================================================== 
-    / ================ HORIZONTAL ======================
-    ==================================================*/
-    &.horizontal {
-        &.ncolas-1 #tickets {
-            grid-template: 1fr / 1fr;
-            button  { 
-                flex-direction: column;
-                .nombre { font-size: 5vw;}
-                .num    { font-size: 18vw; }
-                .turno {
-                    font-size: 8vh;
-                }
-                i[class^="icon-"]::before { font-size: 25vw; top: 60%; }
-            }
+    &.ncolas-1 #tickets {
+        grid-template: 1fr / 1fr;
+        .nombre { font-size: 8vh;}
+        .num    { font-size: 20vh; }
+        .turno {
+            display: flex;
+            width: 100%;
+            font-size: 3vh;
+            flex: 1;
+            align-items: center;
+            justify-content: center;
         }
-
-        &.ncolas-2 #tickets {
-            grid-template: repeat(2, 1fr) / 1fr;
-            .nombre { font-size: 5vw;}
-            .num    { font-size: 14vw; }
-            button  { flex-direction: row; }
-            i[class^="icon-"]::before { font-size: 20vw; top: 30%; }
-        }
-        
-        &.ncolas-3 #tickets {
-            grid-template: repeat(3, 1fr) / 1fr;
-            .nombre { font-size: 4vw; }
-            .num    { 
-                font-size: 10vw;
-            }
-            button  { flex-direction: row; }
-            i[class^="icon-"]::before { font-size: 18vw; top: -5%; }
-        }
-        
-        &.ncolas-4 #tickets {
-            grid-template: repeat(2, 1fr) / repeat(2, 1fr);
-            .nombre { font-size: 3vw; }
-            .num    { font-size: 10vw; }
-            button  { flex-direction: column; }
-            i[class^="icon-"]::before { font-size: 20vw; top: 30%; }
-        }
-        
-        &.ncolas-5 #tickets {
-            grid-template: repeat(2, 1fr) / repeat(12, 1fr);
-            .nombre { font-size: 2.5vw; }
-            .num    { font-size: 9vw; }
-            button {
-                flex-direction: column;
-                &:nth-child(-n+3) { grid-column: span 4; }
-                &:nth-child(n+4) { grid-column: span 6; }
-            }
-            i[class^="icon-"]::before { font-size: 20vw; top: 30%; }
-        }
-        
-        &.ncolas-6 #tickets {
-            grid-template: repeat(2, 1fr) / repeat(3, 1fr);
-            .nombre { font-size: 2.5vw; }
-            .num    { font-size: 9vw; }
-            button  { flex-direction: column; }
-            i[class^="icon-"]::before { font-size: 20vw; top: 30%; }
-        }
+        button  { flex-direction: column; }
+        i[class^="icon-"]::before { font-size: 32vh; top: 50%; }
     }
 
-    /*================================================== 
-    / ================ VERTICAL ======================
-    ==================================================*/
-    &.vertical {
-        &.ncolas-1 #tickets {
-            grid-template: 1fr / 1fr;
-            .nombre { font-size: 8vh;}
-            .num    { font-size: 20vh; }
-            .turno {
-                display: flex;
-                width: 100%;
-                font-size: 3vh;
-                flex: 1;
-                align-items: center;
-                justify-content: center;
+    &.ncolas-2 #tickets {
+        grid-template: repeat(2, 1fr) / 1fr;
+        .nombre { font-size: 5vh; flex: 6;}
+        .num    { font-size: 12vh; flex: 4; }
+        .turno {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 .5em;
+            height: 100%;
+            font-size: 2vh;
+            flex-direction: column;
+            flex: 3;
+            > span {
+                font-size: 3em;
             }
-            button  { flex-direction: column; }
-            i[class^="icon-"]::before { font-size: 32vh; top: 50%; }
         }
-
-        &.ncolas-2 #tickets {
-            grid-template: repeat(2, 1fr) / 1fr;
-            .nombre { font-size: 5vh; flex: 6;}
-            .num    { font-size: 12vh; flex: 4; }
-            .turno {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 0 .5em;
-                height: 100%;
-                font-size: 2vh;
-                flex-direction: column;
-                flex: 3;
-                > span {
-                    font-size: 3em;
-                }
-            }
-            button  { flex-direction: row; }
-            i[class^="icon-"]::before { font-size: 20vh; top: 30%; }
-        }
-        
-        &.ncolas-3 #tickets {
-            grid-template: repeat(3, 1fr) / 1fr;
-            .nombre { font-size: 5vh; flex: 6; }
-            .num    { font-size: 10vh; flex: 4; }
-            .turno {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 0 .5em;
-                height: 100%;
-                font-size: 2vh;
-                flex-direction: column;
-                flex: 3;
-                > span {
-                    font-size: 3em;
-                }
-            }
-            button  { flex-direction: row; }
-            i[class^="icon-"]::before { font-size: 18vh; top: -5%; }
-        }
-        
-        
-        &.ncolas-4 #tickets {
-            grid-template: repeat(2, 1fr) / repeat(2, 1fr);
-            .nombre { font-size: 4vh; }
-            .num    { font-size: 10vh; }
-            button  { flex-direction: column; }
-            i[class^="icon-"]::before { font-size: 20vh; top: 30%; }
-        }
-        
-        &.ncolas-5 #tickets {
-            grid-template: repeat(2, 1fr) / repeat(12, 1fr);
-            .nombre { font-size: 3vh; }
-            .num    { font-size: 9vh; }
-            button {
-                flex-direction: column;
-                &:nth-child(-n+3) { grid-column: span 4; }
-                &:nth-child(n+4) { grid-column: span 6; }
-            }
-            i[class^="icon-"]::before { font-size: 20vh; top: 30%; }
-        }
-        
-        &.ncolas-6 #tickets {
-            grid-template: repeat(2, 1fr) / repeat(3, 1fr);
-            .nombre { font-size: 3vh; }
-            .num    { font-size: 9vh; }
-            button  { flex-direction: column; }
-            i[class^="icon-"]::before { font-size: 20vh; top: 30%; }
-        }
+        button  { flex-direction: row; }
+        i[class^="icon-"]::before { font-size: 20vh; top: 30%; }
     }
-
+    
+    &.ncolas-3 #tickets {
+        grid-template: repeat(3, 1fr) / 1fr;
+        .nombre { font-size: 5vh; flex: 6; }
+        .num    { font-size: 10vh; flex: 4; }
+        .turno {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 .5em;
+            height: 100%;
+            font-size: 2vh;
+            flex-direction: column;
+            flex: 3;
+            > span {
+                font-size: 3em;
+            }
+        }
+        button  { flex-direction: row; }
+        i[class^="icon-"]::before { font-size: 18vh; top: -5%; }
+    }
+    
+    
+    &.ncolas-4 #tickets {
+        grid-template: repeat(2, 1fr) / repeat(2, 1fr);
+        .nombre { font-size: 4vh; margin-top: 5%; }
+        .num    { font-size: 10vh; }
+        button  { flex-direction: column; }
+        i[class^="icon-"]::before { font-size: 20vh; top: 30%; }
+    }
+    
+    &.ncolas-5 #tickets {
+        grid-template: repeat(2, 1fr) / repeat(12, 1fr);
+        .nombre { font-size: 3vh; margin-top: 5%; }
+        .num    { font-size: 9vh; }
+        button {
+            flex-direction: column;
+            &:nth-child(-n+3) { grid-column: span 4; }
+            &:nth-child(n+4) { grid-column: span 6; }
+        }
+        i[class^="icon-"]::before { font-size: 20vh; top: 30%; }
+    }
+    
+    &.ncolas-6 #tickets {
+        grid-template: repeat(2, 1fr) / repeat(3, 1fr);
+        .nombre { font-size: 3vh; margin-top: 5%; }
+        .num    { font-size: 9vh; }
+        button  { flex-direction: column; }
+        i[class^="icon-"]::before { font-size: 20vh; top: 30%; }
+    }
 }

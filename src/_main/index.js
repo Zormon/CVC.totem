@@ -1,4 +1,4 @@
-import wSocket from './wSocket.class.js'
+import wSocket from './wSocketTotem.class.js'
 import Content from './content.class.js'
 import Printer from './printer.class.js'
 import {$} from '../exports.web.js'
@@ -28,14 +28,14 @@ switch (ui.type) {
 }
 document.adoptedStyleSheets = [css]
 
-var content = new Content(conf.contentDir, window.ipc.logger )
+var content = new Content(conf.contentDir, false, window.ipc.logger )
 content.updatePlaylist().then( ()=> { content.next() })
 setInterval(()=>{ content.updatePlaylist() }, 20000) // 20 seconds
 
 var printer = new Printer(conf.printer, { printer: window.ipc.printer, logger: window.ipc.logger })
 printer.init()
 
-var ws = new wSocket(conf, ui.exColas, printer, window.ipc.logger )
+var ws = new wSocket(conf.server, content, ui, printer, window.ipc, {pan:true, touch: conf.touch} )
 ws.init()
 
 time()

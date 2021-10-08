@@ -17,8 +17,14 @@ contextBridge.exposeInMainWorld (
             std: (data) => ipcRenderer.send('log', data),
             error: (data) => ipcRenderer.send('logError', data),
         },
+        win: {
+            close: (win) => ipcRenderer.send('closeWindow', win)
+        },
+        sys: {
+            shellExec: (cmd) => ipcRenderer.send('execShell', cmd)
+        },
         printer: {
-            printPage: (page) => { ipcRenderer.send('printPage', page) }
+            printPage: (page, width, height, dryrun) => { ipcRenderer.send('printPage', page, width, height, dryrun) }
         }
     }
 )

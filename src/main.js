@@ -272,7 +272,7 @@ ipcMain.on('getGlobal', (e, type) => {
   }
 })
 
-ipcMain.on('printPage', (e, page) => {
+ipcMain.on('printPage', (e, page, width, height, dryrun) => {
   var printOptions = { 
     silent: true, printBackground: true
   }
@@ -283,9 +283,9 @@ ipcMain.on('printPage', (e, page) => {
   let printers = printWin.webContents.getPrinters()
 
   printWin.webContents.on('did-finish-load', () => {
-      if (!global.APPCONF.printer.ticket.disabled) { printWin.webContents.print(printOptions) }
+      if (!dryrun) { printWin.webContents.print(printOptions) }
       else  {
-        printWin.setBounds( {width: Math.round(global.APPCONF.printer.ticket.width * 1.1), height: Math.round(global.APPCONF.printer.ticket.width * 1.3)})
+        printWin.setBounds( {width: width+20, height: height+43})
         printWin.show()
         setTimeout( ()=>{ printWin.close() }, 4000)
       }
@@ -331,10 +331,10 @@ ipcMain.on('saveDirDialog', (e, arg) => {
   let options
   if (arg.file) { // Abre archivo
     options = {
-      title : 'Abrir archivo lista.xml', 
+      title : 'Abrir archivo lista.json', 
       defaultPath : arg.dir,
       buttonLabel : "Abrir lista",
-      filters : [{name: 'lista', extensions: ['xml']}],
+      filters : [{name: 'lista', extensions: ['json']}],
       properties: ['openFile']
     }
   } else { // Abre directorio

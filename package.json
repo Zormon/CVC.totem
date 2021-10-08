@@ -1,7 +1,7 @@
 {
   "name": "totem",
   "productName": "totem",
-  "version": "5.2.6",
+  "version": "6.0.0",
   "description": "Totem CVC",
   "main": "src/main.js",
   "scripts": {

@@ -26,3 +26,21 @@ $dark-color: black;
     src: url(num.ttf);
     font-weight: 900;
 }
+
+@keyframes zoom-in {
+    0% {     
+        clip-path: circle(0 at 40% 40%);
+        opacity: 0;
+    }
+    40% {
+        opacity: 1;
+    }
+    100% {
+        clip-path: circle(60vw at 50% 50%);
+    }
+}
+
+@keyframes advance {
+    0%      { transform: scaleX(0); }
+    100%    { transform: scaleX(1); }
+}
