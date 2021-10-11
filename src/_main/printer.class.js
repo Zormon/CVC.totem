@@ -15,7 +15,7 @@ class Printer {
         this.url = `http://${this.ip}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=3000`
         // Footer de impresion
         this.footer = document.createElement('img')
-        this.footer.src = "../../files/printFooter.png"
+        this.footer.src = `file://${ipc.get.path('userData')}/_custom/printFooter.png`
     }
 
     init () {

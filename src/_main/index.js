@@ -6,7 +6,6 @@ const conf = window.ipc.get.appConf()
 const ui = window.ipc.get.interface()
 
 
-
 function time() {
   let date = new Date
   $('time').textContent = date.getHours().toString().padStart(2,'0') + ':' + date.getMinutes().toString().padStart(2,'0')
@@ -28,18 +27,21 @@ switch (ui.type) {
 }
 document.adoptedStyleSheets = [css]
 
+$('midImg').src = `file://${window.ipc.get.path('userData')}/_custom/midBarImg.png`
+$('rightImg').src = `file://${window.ipc.get.path('userData')}/_custom/rightBarImg.png`
+
+
 var content = new Content(conf.contentDir, false, window.ipc.logger )
 content.updatePlaylist().then( ()=> { content.next() })
 setInterval(()=>{ content.updatePlaylist() }, 20000) // 20 seconds
 
-var printer = new Printer(conf.printer, { printer: window.ipc.printer, logger: window.ipc.logger })
+var printer = new Printer(conf.printer, window.ipc)
 printer.init()
 
 var ws = new wSocket(conf.server, content, ui, printer, window.ipc, {pan:true, touch: conf.touch} )
 ws.init()
 
-time()
-setInterval(time, 5000)
+time(); setInterval(time, 5000)
 
 
 

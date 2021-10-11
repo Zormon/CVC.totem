@@ -21,20 +21,20 @@ function savePreferences() {
     CONF.window.posX = parseInt( $('windowPosX').value != ''? $('windowPosX').value : $('windowPosX').placeholder )
     CONF.window.posY = parseInt( $('windowPosY').value != ''? $('windowPosY').value : $('windowPosY').placeholder )
 
-    // Imagen de logo
+    // Imagen de pie de pagina
     if (typeof $('printFooter').files[0] != 'undefined') {
-        CONF.printLogo = {name: 'printFooter.png', file: $('canvasFooter').toDataURL("image/png").substring(22)}
+        CONF.printFooter = {name: 'printFooter.png', file: $('canvasPrintFooter').toDataURL("image/png").substring(22)}
     }
 
     window.ipc.save.appConf( CONF )
 }
 
-function canvasThumb(event, canvas, width, height) {
+function canvasThumb(file, canvas, width, height) {
     canvas.width = width
     canvas.height = height
     canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
     var img = document.createElement('img')
-    img.src = URL.createObjectURL( event.files[0] )
+    img.src = file
 
     img.onload = ()=> {
         canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height )
@@ -46,8 +46,8 @@ function clearCanvas(canvas) {
 }
 
 $('printFooter').onchange = (e) => { 
-    if (typeof e.currentTarget.files[0] != 'undefined')     { canvasThumb(e.currentTarget, $('canvasFooter'), 240, 60) } 
-    else                                                    { clearCanvas($('canvasFooter')) }
+    if (typeof e.currentTarget.files[0] != 'undefined')     { canvasThumb(URL.createObjectURL(e.currentTarget.files[0]), $('canvasPrintFooter'), 240, 60) } 
+    else                                                    { clearCanvas($('canvasPrintFooter')) }
 }
 
 $('save').onclick = (e)=> {
@@ -114,6 +114,8 @@ $('windowWidth').value = CONF.window.width
 $('windowHeight').value = CONF.window.height
 $('windowPosX').value = CONF.window.posX
 $('windowPosY').value = CONF.window.posY
+
+canvasThumb(`file://${window.ipc.get.path('userData')}/_custom/printFooter.png`, $('canvasPrintFooter'), 1000, 250)
 
 const event = new Event('change')
 $('windowType').dispatchEvent(event)

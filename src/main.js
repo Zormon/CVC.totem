@@ -12,8 +12,8 @@ var appWin, configWin, configServerWin, configUIWin;
 =            Preferencias            =
 =============================================*/
 
-  const CONFIG_FILE = `${app.getPath('userData')}/APPCONF.json`
-  const CONFIGUI_FILE = `${app.getPath('userData')}/APPCONFUI.json`
+  const CONFIG_FILE = `${app.getPath('userData')}/_custom/APPCONF.json`
+  const CONFIGUI_FILE = `${app.getPath('userData')}/_custom/APPCONFUI.json`
 
   // Defaults
   const DEFAULT_CONFIG = { 
@@ -196,7 +196,7 @@ var appWin, configWin, configServerWin, configUIWin;
     appWin.on('closed', () => { logs.log('MAIN','QUIT',''); app.quit() })
 
     logs.log('MAIN','START','')
-    appWin.webContents.openDevTools()
+    //appWin.webContents.openDevTools()
   }
 
   function config() {
@@ -225,7 +225,7 @@ var appWin, configWin, configServerWin, configUIWin;
       configUIWin.show()
       
       configUIWin.on('closed', () => { configUIWin = null })
-      //configUIWin.webContents.openDevTools()
+      configUIWin.webContents.openDevTools()
     }
 
   function configServer() {
@@ -254,6 +254,7 @@ var appWin, configWin, configServerWin, configUIWin;
 /*=====  End of Ventanas  ======*/
 
 
+app.setAppLogsPath(global.APPCONF.logsDir)
 app.on('ready', initApp)
 
 
@@ -270,6 +271,10 @@ ipcMain.on('getGlobal', (e, type) => {
       e.returnValue = global.UI
     break
   }
+})
+
+ipcMain.on('getPath', (e, dir) => {
+  e.returnValue = app.getPath(dir)
 })
 
 ipcMain.on('printPage', (e, page, width, height, dryrun) => {
@@ -297,11 +302,11 @@ ipcMain.on('saveAppConf', (e, arg) => {
   saveConfFile(arg, CONFIG_FILE)
   logs.log('MAIN', 'SAVE_PREFS', JSON.stringify(arg))
 
-  //Logo cliente
-  if (arg.printLogo) {
-    const path = app.getAppPath() + '/files/'
-    const file = Buffer.from(arg.printLogo.file, 'base64');
-    fs.writeFileSync(path + arg.printLogo.name, file)
+  //Footer de ticket de impresion
+  if (arg.printFooter) {
+    const path = app.getPath('userData') + '/_custom/'
+    const file = Buffer.from(arg.printFooter.file, 'base64');
+    fs.writeFileSync(path + arg.printFooter.name, file)
   }
   restart()
 })
@@ -311,18 +316,18 @@ ipcMain.on('saveInterface', (e, arg) => {
   saveConfFile(arg, CONFIGUI_FILE)
   logs.log('MAIN', 'SAVE_INTERFACE', JSON.stringify(arg))
 
-  //Logo cliente
-  if (arg.logo) {
-    const path = app.getAppPath() + '/files/'
-    const file = Buffer.from(arg.logo.file, 'base64');
-    fs.writeFileSync(path + arg.logo.name, file)
+  //Imagen derecha
+  if (arg.rightBarImg) {
+    const path = app.getPath('userData') + '/_custom/'
+    const file = Buffer.from(arg.rightBarImg.file, 'base64');
+    fs.writeFileSync(path + arg.rightBarImg.name, file)
   }
 
-  //Imagen de barra
-  if (arg.barImg) {
-    const path = app.getAppPath() + '/files/'
-    const file = Buffer.from(arg.barImg.file, 'base64');
-    fs.writeFileSync(path + arg.barImg.name, file)
+  //Imagen central
+  if (arg.midBarImg) {
+    const path = app.getPath('userData') + '/_custom/'
+    const file = Buffer.from(arg.midBarImg.file, 'base64');
+    fs.writeFileSync(path + arg.midBarImg.name, file)
   }
   restart()
 })

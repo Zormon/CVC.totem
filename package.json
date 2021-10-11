@@ -1,25 +1,15 @@
 {
   "name": "totem",
-  "productName": "totem",
-  "version": "6.0.0",
+   "productName": "totem",
+  "version": "6.1.0",
   "description": "Totem CVC",
   "main": "src/main.js",
-  "scripts": {
-    "start": "electron-forge start",
-    "package": "electron-forge package",
-    "package-linux": "electron-forge package --platform=linux --arch=x64"
-  },
   "author": "Comunicacion Visual Canarias",
   "license": "MIT",
-  "config": {
-    "forge": {
-      "packagerConfig": {
-		"ignore": ["sass", ".vscode", ".gitignore", "yarn.lock"]
-	  }
-    }
-  },
   "devDependencies": {
-    "@electron-forge/cli": "6.0.0-beta.54",
-    "electron": "^11.4.6"
+    "electron": "^15.1.1"
+  },
+  "scripts": {
+    "start": "electron ."
   }
 }
