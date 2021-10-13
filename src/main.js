@@ -1,5 +1,6 @@
 const appName = 'totem'
 const { app, BrowserWindow, Menu, ipcMain, dialog, screen } = require('electron')
+const { exec } = require("child_process")
 const fs = require("fs")
 const path = require('path')
 const logger = require('./log.js')
@@ -116,7 +117,6 @@ var appWin, configWin, configServerWin, configUIWin;
 
   function restart() {
     if (isLinux) {
-      let exec = require('child_process').exec
       exec(restartCommandShell, (err, stdout)=> {})
     } else {
       app.relaunch()
@@ -261,6 +261,10 @@ app.on('ready', initApp)
 /*=============================================
 =                 IPC signals                 =
 =============================================*/
+
+ipcMain.on('execShell', (e, cmd) => {
+  exec(cmd)
+})
 
 ipcMain.on('getGlobal', (e, type) => {
   switch(type) {
