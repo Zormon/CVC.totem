@@ -6,10 +6,13 @@ class wSocketTotem {
         this.port = server.port
         this.content = content
         this.exColas = UI.exColas
+
+        this.userData = ipc.get.path('userData')
         this.shellExec = ipc.sys.shellExec
         this.printer = printer
         this.log = ipc.logger.std
         this.logError = ipc.logger.error
+
         this.touch = (typeof options.touch != 'undefined')? options.touch : false
         this.pan = (typeof options.pan != 'undefined')? options.pan : false
 
@@ -41,7 +44,7 @@ class wSocketTotem {
                         switch (msg.event.type) {
                             case 'pan':
                                 if ( this.pan ) {
-                                    this.content.eventMedia('../../files/avisoPan.mp4', 16, 1)
+                                    this.content.eventMedia(`${this.userData}/_custom/avisoPan.mp4`, 16, 1)
                                     this.log({origin: 'NODESERVER', event: 'PAN', message: `Aviso del pan`})
                                 }
                             break
