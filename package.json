@@ -7,7 +7,7 @@
   "author": "Comunicacion Visual Canarias",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^15.1.1"
+    "electron": "^15.1.2"
   },
   "scripts": {
     "start": "electron ."
