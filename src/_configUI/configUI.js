@@ -1,6 +1,6 @@
 import {$, $$, $$$} from '../exports.web.js'
 
-const event = new Event('change')
+const ev = new Event('change')
 var UI = window.ipc.get.interface()
 
 function saveConfigUI() {
@@ -77,7 +77,7 @@ $('default').onclick = (e)=> {
     $('mainColor').value = '#7eb031'
     $('secondaryColor').value = '#ffffff'
     $$$(`#exColas option`).forEach( el => { el.selected = false })
-    $('type').dispatchEvent(event)
+    $('type').dispatchEvent(ev)
 }
 
 // Initialization
@@ -93,5 +93,4 @@ UI.exColas.forEach(num => { $$(`#exColas option[value='${num}'`).selected = true
 canvasThumb(`file://${window.ipc.get.path('userData')}/_custom/rightBarImg.png`, $('canvasRightBarImg'), 1000, 250)
 canvasThumb(`file://${window.ipc.get.path('userData')}/_custom/midBarImg.png`, $('canvasMidBarImg'), 1000, 250)
 
-const ev = new Event('change')
 $('type').dispatchEvent(ev)
