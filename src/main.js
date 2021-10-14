@@ -225,7 +225,7 @@ var appWin, configWin, configServerWin, configUIWin;
       configUIWin.show()
       
       configUIWin.on('closed', () => { configUIWin = null })
-      configUIWin.webContents.openDevTools()
+      //configUIWin.webContents.openDevTools()
     }
 
   function configServer() {
