@@ -104,12 +104,11 @@ class wSocketTotem {
             }
         }
         document.body.classList.add(`ncolas-${ncolas}`)
-        console.log(ncolas)
     }
 
     update(cola, num) {
         try         { var mainNum = $$(`#cola${cola}`) } catch(e){return}
-        mainNum.innerHTML = `<span>Atendido:</span> <span>${num.toString()}</span>`
+        mainNum.innerHTML = `Atendido: <span>${num.toString()}</span>`
     }
 
     updateTicket(cola, num) {
