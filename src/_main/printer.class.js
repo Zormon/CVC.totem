@@ -60,7 +60,7 @@ class Printer {
                 printPage += '</head><body>'
                 printPage += `<img width="${canvas.width}" src="${canvas.toDataURL("image/png")}">`
                 printPage += '</body></html>'
-                this.printPage(printPage, canvas.width, canvas.height, conf.printer.ticket.disabled)
+                this.printPage(printPage, canvas.width, canvas.height, this.disabled)
             break
         }
         
