@@ -7,7 +7,8 @@ class Printer {
         this.port = conf.port
         this.log = ipc.logger.std
         this.logError = ipc.logger.error
-        this.printPage = ipc.printer.printPage
+        this.printPreview = ipc.printer.printPreview
+        this.printImg = ipc.printer.printImg
         this.disabled = conf.ticket.disabled
         this.width = conf.ticket.width
 
@@ -40,28 +41,31 @@ class Printer {
         ctx.drawImage( this.footer, canvas.width*.1, canvas.width*.9, canvas.width*.8, canvas.width*.8/footerRatio )
         const imageData = ctx.getImageData(0,0,canvas.width,canvas.height)
 
-        switch (this.type) {
-            case 0: //ePOS printer
-                const raster = this.toMonoImage( imageData )
-                let printData = '<?xml version="1.0" encoding="utf-8"?><s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"><s:Body><epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">'
-                printData += `<image width="${canvas.width}" height="${canvas.height}" color="color_1" mode="mono">${btoa(raster)}</image>`
-                printData += '<cut type="feed" />'
-                printData += '</epos-print></s:Body></s:Envelope>'
-                if (!this.disabled) { navigator.sendBeacon(this.url, new Blob([printData], {type:'text/plain'})) }
-                else { // Visualizar ticket
-                    let printPage = '<!DOCTYPE html><html><head><title></title><style>body, html { margin:0; padding:0; overflow:hidden; } img{border: 2px solid green;}</style>'
-                    printPage += `</head><body><img width="${canvas.width}" height="${canvas.height}" src="${canvas.toDataURL("image/png")}"></body></html>`
-                    this.printPage(printPage, canvas.width, canvas.height, true)
-                }
-            break
-            case 1: // Usb
-                let printPage = '<!DOCTYPE html><html><head><title></title>'
-                printPage += `<style>body, html { margin:0; padding:0; overflow:hidden; }</style>`
-                printPage += '</head><body>'
-                printPage += `<img width="${canvas.width}" src="${canvas.toDataURL("image/png")}">`
-                printPage += '</body></html>'
-                this.printPage(printPage, canvas.width, canvas.height, this.disabled)
-            break
+        if (!this.disabled) {
+            switch (this.type) {
+                case 0: //ePOS printer
+                    const raster = this.toMonoImage( imageData )
+                    let printData = '<?xml version="1.0" encoding="utf-8"?><s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"><s:Body><epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">'
+                    printData += `<image width="${canvas.width}" height="${canvas.height}" color="color_1" mode="mono">${btoa(raster)}</image>`
+                    printData += '<cut type="feed" />'
+                    printData += '</epos-print></s:Body></s:Envelope>'
+
+                    navigator.sendBeacon(this.url, new Blob([printData], {type:'text/plain'}))
+                break
+                case 1: // Usb
+                    let printPage = '<!DOCTYPE html><html><head><title></title>'
+                    printPage += `<style>body, html { margin:0; padding:0; overflow:hidden; }</style>`
+                    printPage += '</head><body>'
+                    printPage += `<img width="${canvas.width}" src="${canvas.toDataURL("image/png")}">`
+                    printPage += '</body></html>'
+    
+                    this.printImg( canvas.toDataURL("image/png") )
+                break
+            }
+        } else { // Solo preview de impresion
+            let printPage = '<!DOCTYPE html><html><head><title></title><style>body, html { margin:0; padding:0; overflow:hidden; } img{border: 2px solid green;}</style>'
+            printPage += `</head><body><img width="${canvas.width}" height="${canvas.height}" src="${canvas.toDataURL("image/png")}"></body></html>`
+            this.printPreview(printPage, canvas.width, canvas.height, true)
         }
         
         await sleep(5000)

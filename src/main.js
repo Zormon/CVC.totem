@@ -281,23 +281,27 @@ ipcMain.on('getPath', (e, dir) => {
   e.returnValue = app.getPath(dir)
 })
 
-ipcMain.on('printPage', (e, page, width, height, dryrun) => {
-  var printOptions = { 
-    silent: true, printBackground: true
+ipcMain.on('printImg', (e, img) => {
+  var data = img.replace(/^data:image\/\w+;base64,/, "")
+  var buf = Buffer.from(data, 'base64')
+  fs.writeFileSync(app.getPath('temp')+'/ticket.png', buf)
+  // Imprimir realmente
+  if (isLinux) {
+    exec(`lp ${app.getPath('temp')+'/ticket.png'}`, (err, stdout)=> {})
+  } else {
+    // Imprimir con windows
   }
+})
+
+ipcMain.on('printPreview', (e, page, width, height) => {
   let printWin = new BrowserWindow({ show: false, type:'toolbar', webPreferences: { contextIsolation: true}})
   printWin.setMenu(null)
   printWin.loadURL("data:text/html;charset=utf-8," + encodeURI(page))
 
-  let printers = printWin.webContents.getPrinters()
-
   printWin.webContents.on('did-finish-load', () => {
-      if (!dryrun) { printWin.webContents.print(printOptions) }
-      else  {
         printWin.setBounds( {width: width+20, height: height+43})
         printWin.show()
-        setTimeout( ()=>{ printWin.close() }, 4000)
-      }
+        setTimeout( ()=>{ printWin.close() }, 5000)
   })
 })
 
