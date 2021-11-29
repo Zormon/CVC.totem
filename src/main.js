@@ -161,7 +161,7 @@ var appWin, configWin, configServerWin, configUIWin;
 =============================================*/
 
   function initApp() {
-    let windowOptions = {autoHideMenuBar: true, resizable:true, show: false, webPreferences: {spellcheck:false, contextIsolation: true, preload: path.join(__dirname, "preload.js") }, icon: `${app.getAppPath()}/icon64.png`}
+    let windowOptions = {autoHideMenuBar: true, resizable:true, show: false, webPreferences: {spellcheck:false, preload: path.join(__dirname, "preload.js") }, icon: `${app.getAppPath()}/icon64.png`}
     if      (APPCONF.window.type == 0)   { windowOptions.fullscreen = true }
     else if (APPCONF.window.type == 1)   { windowOptions.frame = false; windowOptions.alwaysOnTop = true } // Borderless
     appWin = new BrowserWindow(windowOptions)
@@ -202,7 +202,7 @@ var appWin, configWin, configServerWin, configUIWin;
   function config() {
     const winOptions = {
       width: 720, height: 550, show:false, parent: appWin, modal:true, resizable:false, 
-      webPreferences: { spellcheck:false, contextIsolation: true, preload: path.join(__dirname, "preload.js") }
+      webPreferences: { spellcheck:false, preload: path.join(__dirname, "preload.js") }
     }
     configWin = new BrowserWindow(winOptions)
     configWin.loadFile(`${__dirname}/_config/config.html`)
@@ -217,7 +217,7 @@ var appWin, configWin, configServerWin, configUIWin;
     function configUI() {
       const winOptions = {
         width: 700, height: 460, show:false, parent: appWin, modal:true, resizable:false, 
-        webPreferences: { spellcheck:false, contextIsolation: true, preload: path.join(__dirname, "preload.js") }
+        webPreferences: { spellcheck:false, preload: path.join(__dirname, "preload.js") }
       }
       configUIWin = new BrowserWindow(winOptions)
       configUIWin.loadFile(`${__dirname}/_configUI/configUI.html`)
@@ -231,7 +231,7 @@ var appWin, configWin, configServerWin, configUIWin;
   function configServer() {
     const winOptions = {
       width: 400, height: 550, show:false, parent: appWin, modal:true, resizable:false, 
-      webPreferences: { spellcheck:false, contextIsolation: true, preload: path.join(__dirname, "preload.js") }
+      webPreferences: { spellcheck:false, preload: path.join(__dirname, "preload.js") }
     }
     configServerWin = new BrowserWindow(winOptions)
     configServerWin.loadFile(`${__dirname}/_configServer/configServer.html`)
@@ -294,7 +294,7 @@ ipcMain.on('printImg', (e, img) => {
 })
 
 ipcMain.on('printPreview', (e, page, width, height) => {
-  let printWin = new BrowserWindow({ show: false, type:'toolbar', webPreferences: { spellcheck:false, contextIsolation: true}})
+  let printWin = new BrowserWindow({ show: false, type:'toolbar', webPreferences: { spellcheck:false}})
   printWin.setMenu(null)
   printWin.loadURL("data:text/html;charset=utf-8," + encodeURI(page))
 
