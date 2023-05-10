@@ -1,11 +1,11 @@
 import {iconNames, $, $$, modalBox} from '../exports.web.js'
 
 class wSocketTotem {
-    constructor(server, content, UI, printer, ipc, options={pan:false, touch:false}) {
-        this.ip = server.ip
-        this.port = server.port
+    constructor(CONF, content, printer, ipc, options={pan:false, touchScreen:false}) {
+        this.ip = CONF.server.ip
+        this.port = CONF.server.port
         this.content = content
-        this.exColas = UI.exColas
+        this.UI = CONF.interface
 
         this.userData = ipc.get.path('userData')
         this.shellExec = ipc.sys.shellExec
@@ -13,10 +13,10 @@ class wSocketTotem {
         this.log = ipc.logger.std
         this.logError = ipc.logger.error
 
-        this.touch = (typeof options.touch != 'undefined')? options.touch : false
+        this.touchScreen = (typeof options.touchScreen != 'undefined')? options.touchScreen : false
         this.pan = (typeof options.pan != 'undefined')? options.pan : false
 
-        this.printEvent = options.touch? 'ontouchstart' : 'onmousedown'
+        this.printEvent = options.touchScreen? 'ontouchstart' : 'onmousedown'
     }
 
     init() {
@@ -49,15 +49,15 @@ class wSocketTotem {
                                 }
                             break
                             case 'media':
-                                if ( this.content.eventMedia(`${this.content.dir}/files/${msg.event.data.file}`, msg.event.data.duration, msg.event.data.volume)  ) {
+                                if ( this.content.eventMedia(`${this.content.dir}/media/${msg.event.data.file}`, msg.event.data.duration, msg.event.data.volume)  ) {
                                     this.log({origin: 'NODESERVER', event: 'MEDIA_EVENT', message: `Archivo: ${msg.event.data.file}, Duracion: ${msg.event.data.duration}`})
                                 } else {
                                     this.logError({origin: 'NODESERVER', error: 'MEDIA_EVENT_CANT_PLAY', message: `Evento recibido pero no se pudo reproducir ${msg.event.data.file}`})
                                 }
                             break
-                            case 'shellExec':
-                                this.shellExec(msg.event.cmd)
-                                this.log({origin: 'NODESERVER', event: 'SHELLEXEC_EVENT', message: `Comando: ${msg.event.data.cmd}`})
+                            case 'command':
+                                this.shellExec(msg.event.data.shell)
+                                this.log({origin: 'NODESERVER', event: 'COMMAND_EVENT', message: `Comando: ${msg.event.data.cmd}`})
                             break
                         }
                     }
@@ -82,7 +82,7 @@ class wSocketTotem {
 
         let ncolas = 0
         for (let i=0; i < colas.length; i++) {
-            if ( this.exColas.indexOf(i+1) == -1 ) { 
+            if ( this.UI.colas.excluir.indexOf(i+1) == -1 ) { 
                 ncolas++
                 let ticket, nombre, tik, turno, icon
                 // Tickets

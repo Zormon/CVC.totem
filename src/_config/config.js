@@ -1,10 +1,10 @@
-import {$} from '../exports.web.js'
+import {$, $$, tabNav, displayGroup} from '../exports.web.js'
 
 var CONF = window.ipc.get.appConf()
 
-function savePreferences() {
-    CONF.touch = $('touch').checked
-    CONF.contentDir = $('contentDir').value
+async function saveConf() {
+    CONF.touchScreen = $('touchScreen').checked
+    CONF.deployDir = $('deployDir').value
     CONF.logsDir = $('logsDir').value
 
     CONF.server.ip =   $('serverIp').value != ''? $('serverIp').value : $('serverIp').placeholder
@@ -16,17 +16,48 @@ function savePreferences() {
     CONF.printer.ticket.width = parseInt( $('ticketWidth').value != ''? $('ticketWidth').value : $('ticketWidth').placeholder )
 
     CONF.window.type = parseInt($('windowType').value)
-    CONF.window.height = parseInt( $('windowHeight').value != ''? $('windowHeight').value : $('windowHeight').placeholder )
-    CONF.window.width = parseInt( $('windowWidth').value != ''? $('windowWidth').value : $('windowWidth').placeholder )
+    CONF.window.height = parseInt( $('windowSizeY').value != ''? $('windowSizeY').value : $('windowSizeY').placeholder )
+    CONF.window.width = parseInt( $('windowSizeX').value != ''? $('windowSizeX').value : $('windowSizeX').placeholder )
     CONF.window.posX = parseInt( $('windowPosX').value != ''? $('windowPosX').value : $('windowPosX').placeholder )
     CONF.window.posY = parseInt( $('windowPosY').value != ''? $('windowPosY').value : $('windowPosY').placeholder )
+    CONF.window.alwaysOnTop = $('alwaysOnTop').checked
+    
+    CONF.interface.info = $('infoBar').checked
+    CONF.interface.type = parseInt($('interfaceType').value)
+    CONF.interface.ticketAreaSize = parseInt($('ticketAreaSize').value)
 
-    // Imagen de pie de pagina
-    if (typeof $('printFooter').files[0] != 'undefined') {
-        CONF.printFooter = {name: 'printFooter.png', file: $('canvasPrintFooter').toDataURL("image/png").substring(22)}
+    CONF.interface.colors.app = $('appColor').value
+    CONF.interface.colors.main = $('mainColor').value
+    CONF.interface.colors.secondary = $('secondaryColor').value
+
+    CONF.interface.colas.excluir = Array.from( $('exColas').selectedOptions ).map(el => parseInt(el.value))
+
+
+    //const reader = new FileReader()
+    let files=[], file, dataUrl
+    // Imagen derecha
+    file = $('rightBarImg').files[0]
+    if (!!file) {
+        dataUrl = await readFileAsDataURL(file)
+        files.push( {name: '/img/rightBarImg.png', file: dataUrl.substring(22)} )
     }
 
-    window.ipc.save.appConf( CONF )
+    // Imagen central
+    file = $('midBarImg').files[0]
+    if (!!file) {
+        dataUrl = await readFileAsDataURL(file)
+        files.push( {name: '/img/midBarImg.png', file: dataUrl.substring(22)} )
+    }
+
+    // Imagen de pie de pagina de tickets
+    file = $('printFooter').files[0]
+    if (!!file) {
+        dataUrl = await readFileAsDataURL(file)
+        files.push( {name: '/img/printFooter.png', file: dataUrl.substring(22)} )
+    }
+
+
+    window.ipc.save.appConf( CONF, files )
 }
 
 function canvasThumb(file, canvas, width, height) {
@@ -52,54 +83,49 @@ $('printFooter').onchange = (e) => {
 
 $('save').onclick = (e)=> {
     e.preventDefault()
-    if ( $('config').checkValidity() )  { savePreferences() }
+    if ( $('config').checkValidity() )  { saveConf() }
     else                                { $('config').reportValidity() }
 }
 
-$('contentDir').onclick = ()=> {
-    let dir = window.ipc.dialog.saveDir({dir: $('contentDir').value, file:'lista.xml'})
-    $('contentDir').value = dir
+$('deployDirExplore').onclick = (e)=> {
+    e.preventDefault()
+    let dir = window.ipc.dialog.saveDir({dir: $('deployDir').value, file:'deploy.json'})
+    $('deployDir').value = dir
 }
 
-$('logsDir').onclick = ()=> {
+$('logsDirExplore').onclick = (e)=> {
+    e.preventDefault()
     let dir = window.ipc.dialog.saveDir({dir: $('logsDir').value, file:false})
     $('logsDir').value = dir
 }
 
-$('printerType').onchange = (e) => { 
-    switch (parseInt(e.currentTarget.value)) {
-        case 0: // ePOS
-            $('printerIp').disabled = false
-            $('printerPort').disabled = false
-        break
-        case 1: // USB
-            $('printerIp').disabled = true
-            $('printerPort').disabled = true
-        break
-    }
-}
+
 
 $('windowType').onchange = (e) => { 
     switch (e.currentTarget.value) {
         case '0': //Fullscreen
-            $('windowWidth').disabled = true;  $('windowHeight').disabled = true
+            $('windowSizeX').disabled = true;  $('windowSizeY').disabled = true
             $('windowPosX').disabled = true;  $('windowPosY').disabled = true
         break
 
         case '1': // Sin bordes
-            $('windowWidth').disabled = false;  $('windowHeight').disabled = false
+            $('windowSizeX').disabled = false;  $('windowSizeY').disabled = false
             $('windowPosX').disabled = false;  $('windowPosY').disabled = false
         break
 
         case '2': // Normal
-            $('windowWidth').disabled = false;  $('windowHeight').disabled = false
+            $('windowSizeX').disabled = false;  $('windowSizeY').disabled = false
             $('windowPosX').disabled = true;  $('windowPosY').disabled = true
     }
 }
 
+$('interfaceType').onchange = (e)=> { displayGroup($('tab-aspecto'), e.currentTarget.value) }
+$('printerType').onchange = (e)=> { displayGroup($('tab-impresion'), e.currentTarget.value) }
+
 // Initialization
-$('touch').checked = CONF.touch
-$('contentDir').value = CONF.contentDir 
+$('touchScreen').checked = CONF.touchScreen
+$('deployDir').value = CONF.deployDir
+$('transitionDuration').value = CONF.media.transitionDuration
 $('logsDir').value = CONF.logsDir
 $('serverIp').value = CONF.server.ip
 $('serverPort').value = CONF.server.port
@@ -110,13 +136,27 @@ $('printerPort').value = CONF.printer.port
 $('ticketWidth').value = CONF.printer.ticket.width
 
 $('windowType').value = CONF.window.type
-$('windowWidth').value = CONF.window.width
-$('windowHeight').value = CONF.window.height
+$('windowSizeX').value = CONF.window.width
+$('windowSizeY').value = CONF.window.height
 $('windowPosX').value = CONF.window.posX
 $('windowPosY').value = CONF.window.posY
+$('alwaysOnTop').checked = CONF.window.alwaysOnTop
+
+$('infoBar').checked = CONF.interface.info
+$('interfaceType').value = CONF.interface.type
+$('ticketAreaSize').value = CONF.interface.ticketAreaSize
+
+$('appColor').value = CONF.interface.colors.app
+$('mainColor').value = CONF.interface.colors.main
+$('secondaryColor').value = CONF.interface.colors.secondary
+
+CONF.interface.colas.excluir.forEach(num => { $$(`#exColas option[value='${num}'`).selected = true })
 
 canvasThumb(`file://${window.ipc.get.path('userData')}/_custom/printFooter.png`, $('canvasPrintFooter'), 1000, 250)
 
 const event = new Event('change')
 $('windowType').dispatchEvent(event)
 $('printerType').dispatchEvent(event)
+$('interfaceType').dispatchEvent(event)
+
+tabNav( $('configTabs'), $('configTabsContent'))

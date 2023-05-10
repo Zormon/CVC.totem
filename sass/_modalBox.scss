@@ -34,7 +34,7 @@ body.vertical {
         width: 90%;
         min-height: 30vh;
         top: -15vh;
-        animation: slide-down .3s;
+        animation: slide-down-box .3s;
 
         .header { font-size: 8vw; }
         .texto  { font-size: 4vw;}
@@ -46,7 +46,7 @@ body.horizontal {
         position: relative;
         width: 45%;
         min-height: 60vh;
-        animation: slide-right .3s;
+        animation: slide-right-box .3s;
         left: -24vw;
 
         .header { font-size: 8vh; }

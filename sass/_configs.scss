@@ -2,62 +2,66 @@ body.config {
     padding: 0;
     margin: 0;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    
-    form {
-        width: 100%;
-        padding: .5em 1em;
-        box-sizing: border-box;
+    display: grid;
+    grid-template-rows: 40px auto 40px;
+    height: 100vh; width: 100%;
+    *:focus-visible { outline-color: #333; }
 
-        &.flex {
-            display: flex;
-            div.col { 
-                flex: 1;
-                &:first-child {
-                    margin-right: .8em;
-                }
-             }
-        }
+    padding: .5em 1em;
+    box-sizing: border-box;
 
-        div { 
-            margin: 0 0 .8em; 
+    background-color: darken($light-color, 40%);
 
-            &.colas {
-                max-height: 450px;
-                overflow-y: auto;
-
-                .cola {
-                    display: flex;
-                    align-items: center;
-
-                    input[type="text"], input[type="num"] {
-                        width: 60%;
-                    }
-
-                    input[type="color"] {
-                        margin-left: 1em;
-                    }
-                }
+    /* SERVER CONFIG */
+    &.server {
+        .cola {
+            .icon {
+                font-size: 1.5em;
+                padding: 0;
             }
         }
+    }
 
-        canvas { 
-            background: repeating-linear-gradient(45deg, #ccc, #ccc 3px, white 3px, white 10px);
-            width: 240px; 
+
+    /* SECTION TABS */
+    nav {
+        display: flex;
+        flex-direction: row;
+
+        button {
+            &.active { background-color: $light-color; }
+            &:not(.active):hover { background-color: darken($light-color, 10%); }
+
+            cursor: default;
+            border-radius: 4px 4px 0px 0px;
+            margin-right: 2px;
+            border: 0;
         }
+    }
 
-        #canvasRightBarImg { 
-            height: 60px;
-        }
+    .tabsContent {
+        padding: 10px;
+        background-color: $light-color;
 
-        #canvasMidBarImg { 
-            height: 43px;
-        }
+        > div:not(.active)  { display: none ; }
+        > div.active        { display: block ; }
+    }
 
-        #canvasPrintFooter {
-            height: 60px;
+    /* / SECTION TABS */
+
+
+    div.colas {
+        max-height: 450px;
+        overflow-y: auto;
+
+        .cola {
+            display: flex;
+            gap: .5em;
+            align-items: center;
+
+            input[type="text"], input[type="number"] {
+                width: 60%;
+            }
         }
     }
 
@@ -76,38 +80,47 @@ body.config {
         }
     }
 
-    input[type="range"] { width: 90%; }
-
-    fieldset {
-        margin-bottom: 1em;
-    }
-
+    fieldset { margin-bottom: 1em; }
     select { overflow: auto; }
 
-    input[type="text"], input[type="num"], select {
-        border: 2px solid darken($light-color, 30%);
-        padding: .4em;
-        margin: .6em 0;
-        width: 90%; 
-        display: block;
 
-        &.icon {
-            width: 20%;
-            margin: 0 0 0 1em;
-            font-family: 'CVC Icons';
-            padding: 0;
-            font-size: 2em;
-        }
-
-        &:hover { border-color: darken($light-color, 50%); }
-
-        &:focus { border-color: $main-color; }
+    div.input { 
+        position: relative; 
+        margin-bottom: 10px; 
     }
+
+
+    input, select {
+        &.wide { width: 100%; }
+    }
+
+    option { font-size: 1.3em; }
+
+
+    input[type=number] {
+        &::-webkit-inner-spin-button, &::-webkit-outer-spin-button { 
+            opacity: 1 !important;
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 100%;
+        }
+    }
+
+    input[type="text"], input[type="number"], select { padding: 5px; }
+    input[type="text"], input[type="number"], input[type="color"], select {
+        margin: 5px 0 0;
+        box-sizing: border-box;
+        border: 2px solid #ccc;
+
+        &:hover { border-color: #666; }
+        &.icon { font-family: 'CVC Icons'; }
+    }
+
     
 
+    /* Checkboxes */
     input[type="checkbox"] { display: none; }
-
-
     input[type="checkbox"] + label::before {
         content: '';
         display: inline-block;
@@ -118,31 +131,48 @@ body.config {
         position: relative;
         top: 0.2em;
     }
-
     input[type="checkbox"]:not(:disabled):hover + label::before { border-color: $dark-color; }
     input[type="checkbox"]:not(:disabled):active + label::before { 
         background-color: darken($light-color, 40%);
         border-color: darken($light-color, 40%);
     }
-
     input[type="checkbox"]:checked + label::before {
         background-color: $main-color;
         border-color: $main-color; 
     }
 
+    /* / Checkboxes */
+
 
     input:disabled { 
         background-color: lightgrey;
-
         & + label::before { background-color: lightgrey !important; } /* Para los checkbox */
      }
-
-     
-
-     div.coord { /* Coordenadas de ventanas */
-        input[type="num"], input[type="text"] { 
-            width: 35%;
-            display: inline-block;
-         }
-    }
 }
+
+
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1rem;
+
+    .g12,.g11,.g10,.g9,.g8,.g7,.g6,.g5,.g4,.g3,.g2,.g1 { width: 100%; }
+
+    .g12 { grid-column-end: span 12; }
+    .g11 { grid-column-end: span 11; }
+    .g10 { grid-column-end: span 10; }
+    .g9 { grid-column-end: span 9; }
+    .g8 { grid-column-end: span 8; }
+    .g7 { grid-column-end: span 7; }
+    .g6 { grid-column-end: span 6; }
+    .g5 { grid-column-end: span 5; }
+    .g4 { grid-column-end: span 4; }
+    .g3 { grid-column-end: span 3; }
+    .g2 { grid-column-end: span 2; }
+    .g1 { grid-column-end: span 1; }
+}
+
+
+
+#canvasPrintFooter { width: 100%; }

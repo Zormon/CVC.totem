@@ -1,13 +1,13 @@
 {
   "name": "totem",
-   "productName": "totem",
-  "version": "6.1.3",
+  "productName": "totem",
+  "version": "6.5.1",
   "description": "Totem CVC",
   "main": "src/main.js",
   "author": "Comunicacion Visual Canarias",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^15.1.2"
+    "electron": "22.0.1"
   },
   "scripts": {
     "start": "electron ."

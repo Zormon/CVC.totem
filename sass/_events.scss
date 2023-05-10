@@ -6,5 +6,19 @@
     top: 0;
     left: 0;
     object-fit: fill;
-    animation: zoom-in .5s ease-out;
+    animation: circle-in .5s ease-out;
+}
+
+/* Transitions */
+
+#content {
+    &.fade          { animation: fade var(--transition-duration); }
+    &.zoom-in       { animation: zoom-in var(--transition-duration); }
+    &.zoom-out      { animation: zoom-out var(--transition-duration); }
+    &.slide-left    { animation: slide-left var(--transition-duration); }
+    &.slide-right   { animation: slide-right var(--transition-duration); }
+    &.slide-up      { animation: slide-up var(--transition-duration); }
+    &.slide-down    { animation: slide-down var(--transition-duration); }
+
+    &.out { animation-direction: reverse; }
 }

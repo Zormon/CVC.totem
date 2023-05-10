@@ -5,13 +5,55 @@ $secondary-color: #ec1b24;
 $light-color: white;
 $dark-color: black;
 
+/* ========================================================
+======================= Transitions =======================
+========================================================= */
+
+@keyframes fade {
+    from { opacity: 0; }
+    to { opacity: 1;}
+}
+
+@keyframes zoom-in {
+    from { opacity: 0; transform: scale(0); }
+    to { opacity: 1; transform: scale(1);}
+}
+
+@keyframes zoom-out {
+    from { opacity: 0; transform: scale(2); }
+    to { opacity: 1; transform: scale(1);}
+}
+
+@keyframes slide-left {
+    from { transform: translateX(-100vw); }
+    to { transform: translateX(0); }
+}
+
+@keyframes slide-right {
+    from { transform: translateX(100vw); }
+    to { transform: translateX(0); }
+}
+
+@keyframes slide-up {
+    from { transform: translateY(-100vh); }
+    to { transform: translateX(0); }
+}
 
 @keyframes slide-down {
+    from { transform: translateY(100vh); }
+    to { transform: translateX(0); }
+}
+
+/* ==================  / Transitions ===================== */
+
+
+
+@keyframes slide-down-box {
     from    { transform: translateY(-170%); }
     to      { transform: translateY(0%); }
 }
 
-@keyframes slide-right {
+@keyframes slide-right-box {
     from    { transform: translateX(-120%); }
     to      { transform: translateX(0%); }
 }
@@ -27,7 +69,7 @@ $dark-color: black;
     font-weight: 900;
 }
 
-@keyframes zoom-in {
+@keyframes circle-in {
     0% {     
         clip-path: circle(0 at 40% 40%);
         opacity: 0;

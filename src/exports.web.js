@@ -19,6 +19,7 @@ var querySelAll = document.querySelectorAll.bind(document)
 // Otras funciones
 function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)) }
 function isFunction(f) {return f && {}.toString.call(f)==='[object Function]'}
+function may(f,...args){try{ return f(...args)}catch{}}
 
 /**
 * Muestra un modal con multiples funciones
@@ -81,6 +82,70 @@ function urlExists(url) {
     })
 }
 
+function tabNav(nav, content) {
+  const buttons = nav.children
+  const storageItemName = `currentTab-${nav.id}`
+  if ( !!!localStorage.getItem(storageItemName) ) { localStorage.setItem(storageItemName, 0) }
+
+  for( let tab of buttons ) {
+    tab.onclick = (ev)=> {
+      const el = ev.currentTarget
+      const tabIndex = [...el.parentNode.children].indexOf(el)
+      localStorage.setItem(storageItemName, tabIndex)
+      if (el.className != 'active') {
+        // Buttons
+        for ( let b of buttons ) { b.className = '' }
+        el.className = 'active'
+        // Tabs
+        for ( let c of content.childNodes ) { c.className = '' }
+        getById(`tab-${el.dataset.tab}`).className = 'active'
+      }
+    }
+  }
+  const initTab = parseInt( localStorage.getItem(storageItemName) )
+  buttons[initTab].dispatchEvent( new Event('click') )
+}
+
+
+function shadeColor(color, percent) {
+  var num = parseInt(color.replace("#",""),16),
+  amt = Math.round(2.55 * percent),
+  R = (num >> 16) + amt,
+  B = (num >> 8 & 0x00FF) + amt,
+  G = (num & 0x0000FF) + amt;
+  return "#" + (0x1000000 + (R<255?R<1?0:R:255)*0x10000 + (B<255?B<1?0:B:255)*0x100 + (G<255?G<1?0:G:255)).toString(16).slice(1)
+}
+
+
+function displayGroup (group, type) {
+  for ( let item of group.querySelectorAll('.visGroup') ) {
+    if ( item.dataset.groups.split(',').includes(type) )  { item.style.display = '' }
+    else                                                  { item.style.display = 'none' }
+  }
+}
+
+
+/**
+ * Actualiza la hora basada en el sistema y la pinta en el elemento
+ */
+ function updateTime(element, interval) {
+  let date = new Date
+  element.textContent = date.getHours().toString().padStart(2,'0') + ':' + date.getMinutes().toString().padStart(2,'0')
+
+  setTimeout(updateTime, interval, element, interval)
+}
+
+
+async function readFileAsDataURL(file) {
+  let result_base64 = await new Promise((resolve) => {
+      let fileReader = new FileReader()
+      fileReader.onload = (e) => resolve( fileReader.result )
+      fileReader.readAsDataURL(file)
+  })
+
+  return result_base64;
+}
+
 
 export { 
   iconNames,
@@ -88,6 +153,12 @@ export {
   modalBox,
   urlExists,
   isFunction,
+  tabNav,
+  displayGroup,
+  shadeColor,
+  updateTime,
+  may,
+  readFileAsDataURL,
   getById as $,
   querySel as $$,
   querySelAll as $$$

@@ -4,12 +4,10 @@ contextBridge.exposeInMainWorld (
     "ipc", {
         get: {
             appConf: () => ipcRenderer.sendSync('getGlobal', 'appConf'),
-            interface: () => ipcRenderer.sendSync('getGlobal', 'interface'),
             path: (dir) => ipcRenderer.sendSync('getPath', dir)
         },
         save: {
-            appConf: (data) => ipcRenderer.send('saveAppConf', data ),
-            interface: (data) => ipcRenderer.send('saveInterface', data )
+            appConf: (data, files=[]) => ipcRenderer.send('saveAppConf', data, files ),
         },
         dialog: {
             saveDir: (opts) => ipcRenderer.sendSync('saveDirDialog', opts),

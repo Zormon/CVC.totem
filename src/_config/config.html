@@ -2,96 +2,183 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Configuracion de la aplicación</title>
+    <title>Configuracion</title>
     <script type="module" src="config.js"></script>
     <link rel="stylesheet" href="../res/config.css">
   </head>
   <body class="config">
-      <form id="config" class="flex">       
-        <div class="col">
-          <div>
-            <label for="contentDir">Directorio de contenidos</label>
-            <input type="text" id="contentDir" title="Requerido" placeholder="/home/cvc/_contenidos/" required>
-          </div>
+    <nav id="configTabs">
+      <button data-tab="contenidos">Contenidos</button>
+      <button data-tab="colas">Colas</button>
+      <button data-tab="impresion">Impresion</button>
+      <button data-tab="aspecto">Aspecto</button>
+      <button data-tab="aplicacion">Aplicación</button>
+    </nav>
 
-          <div>
-            <label for="logsDir">Directorio de registros</label>
-            <input type="text" id="logsDir" title="Requerido" placeholder="/home/cvc/telemetry/logs/" required>
-          </div>
 
-          <div>
-            <label>Servidor</label>
-            <div class="coord">
-              <input type="text" id="serverIp" placeholder="127.0.0.1" pattern="(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)_*(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)_*){3}"> : 
-              <input type="num" id="serverPort" placeholder="3000" maxlength="5">
+    <form id="config">       
+      <div id="configTabsContent" class="tabsContent">
+        <!-- --------------  PESTAÑA CONTENIDOS  ------------------------>
+        <div id="tab-contenidos">
+          <div class="input grid">
+            <div class="g12">
+              <label for="transitionDuration">Duración de transiciones</label>
+              <input id="transitionDuration" type="number" min="0.1" max="3" step="0.1"> s
             </div>
           </div>
-
-          <fieldset>
-            <legend>Ventana</legend>
-            <select id="windowType">
-              <option value="0">Pantalla completa</option>
-              <option value="1">Sin bordes</option>
-              <option value="2">Normal</option>
-            </select>
-  
-            
-            <label>Tamaño de la ventana</label>
-            <div class="coord">
-              <input type="num" id="windowWidth" placeholder="480" maxlength="4"> x 
-              <input type="num" id="windowHeight" placeholder="848" maxlength="4">
-            </div>
-  
-
-            <label>Posición de la ventana</label>
-            <div class="coord">
-              <input type="num" id="windowPosX" placeholder="0" maxlength="4"> x 
-              <input type="num" id="windowPosY" placeholder="0" maxlength="4">
-            </div>
-          </fieldset>
         </div>
 
-        <div class="col">
-          <fieldset>
-            <div>
-              <input type="checkbox" id="touch">
-              <label for="touch">Pantalla táctil</label>
-            </div>
+        <!-- --------------  PESTAÑA COLAS  ------------------------>
+        <div id="tab-colas">
+          <div>
+            <input type="checkbox" id="touchScreen">
+            <label for="touchScreen">Pantalla táctil</label>
+          </div>
 
-            <legend>Impresión</legend>
-            <label for="printerType">Tipo de impresora</label>
-            <select id="printerType">
-              <option value="0">EPSON ePOS</option>
-              <option value="1">Usb</option>
+          <div>
+            <label for="exColas">Excluir colas</label>
+            <select id="exColas" size="6" multiple>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
             </select>
-            
+          </div>
+        </div>
 
+        <!-- --------------  PESTAÑA IMPRESION  ------------------------>
+        <div id="tab-impresion">
+          <label for="printerType">Tipo de impresora</label>
+          <select id="printerType">
+            <option value="0">EPSON ePOS</option>
+            <option value="1">Usb</option>
+          </select>
+
+          <div class="coord visGroup" data-groups="0">
             <label>IP de impresora</label>
-            <div class="coord">
-              <input type="text" id="printerIp" placeholder="192.168.1.241" pattern="(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)_*(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)_*){3}"> : 
-              <input type="num" id="printerPort" placeholder="8008" maxlength="5">
-            </div>
+            <input type="text" id="printerIp" placeholder="192.168.1.241" pattern="(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)_*(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)_*){3}"> : 
+            <input type="num" id="printerPort" placeholder="8008" maxlength="5">
+          </div>
 
-            <div>
-              <label for="ticketWidth">Ancho del ticket (px)</label>
-              <input type="text" id="ticketWidth" placeholder="210">
-            </div>
+          <div class="visGroup" data-groups="0">
+            <label for="ticketWidth">Ancho del ticket (px)</label>
+            <input type="text" id="ticketWidth" placeholder="210">
+          </div>
 
-            <div>
-              <input type="checkbox" id="printDisable">
-              <label for="printDisable">Impresión desactivada</label>
+          <div>
+            <input type="checkbox" id="printDisable">
+            <label for="printDisable">Impresión desactivada</label>
+          </div>
+
+          <div>
+            <label for="printFooter">Pie de pagina de ticket (240px ancho)</label>
+            <input type="file" id="printFooter" accept="image/png">
+          </div>
+          <div><canvas id="canvasPrintFooter"></canvas></div>
+        </div>
+
+        <!-- --------------  PESTAÑA ASPECTO  ------------------------>
+        <div id="tab-aspecto">
+          <div>
+            <label for="interfaceType">Tipo de interfaz</label>
+              <select id="interfaceType">
+                <option value="0">Vertical</option>
+                <option value="1">Horizontal</option>
+              </select>
+          </div>
+
+          <div class="visGroup" data-groups="1">
+            <label for="ticketAreaSize">Ancho del area de tickets</label>
+            <input type="range" id="ticketAreaSize" name="ticketAreaSize" min="30" max="70" step="10" list="ticks"> 
+            <datalist id="ticks"><option value="30"><option value="40"><option value="50"><option value="60"><option value="70"></datalist>
+          </div>
+
+          <div class="input">
+            <input type="checkbox" id="infoBar">
+            <label for="infoBar">Barra informativa</label>
+          </div>
+
+          <fieldset>
+            <legend>Colores</legend>
+            <div class="input grid">
+              <div class="g4">Fondo</div>
+              <div class="g4">Primario</div>
+              <div class="g4">Secundario</div>
+              <div class="g4"><input type="color" id="appColor"></div>
+              <div class="g4"><input type="color" id="mainColor"></div>
+              <div class="g4"><input type="color" id="secondaryColor"></div>
             </div>
-  
-            <div>
-              <label for="printFooter">Pie de pagina de ticket (240px ancho)</label>
-              <input type="file" id="printFooter" accept="image/png">
-            </div>
-            <div><canvas id="canvasPrintFooter"></canvas></div>
           </fieldset>
 
-          <button id="save">Guardar y reiniciar</button>
-        </div>
-      </form>
+          <fieldset>
+            <legend>Imágenes</legend>
+            <div class="input">
+              <label for="rightBarImg">Derecha (1000px x 250px)</label>
+              <input type="file" id="rightBarImg" accept="image/png">
+            </div>
 
+            <div class="input">
+              <label for="midBarImg">Central (1000px x 180px)</label>
+              <input type="file" id="midBarImg" accept="image/png">
+            </div>
+          </fieldset>
+        </div>
+
+        <!-- --------------  PESTAÑA APLICACIÓN  ------------------------>
+        <div id="tab-aplicacion">
+          <div class="input grid">
+            <input class="g10" type="text" class="wide" id="deployDir" readonly>
+            <button class="g2" id="deployDirExplore">...</button>
+          </div>
+
+          <span>Servidor (IP / Puerto)</span>
+          <div class="input grid">
+            <input class="g7 wide" type="text" id="serverIp" placeholder="127.0.0.1" required pattern="(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)_*(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)_*){3}">
+            <input class="g5 wide" type="number" id="serverPort" placeholder="3000" required maxlength="5">
+          </div>
+
+          <div class="input grid">
+            <input type="text" class="g10 wide" id="logsDir" readonly>
+            <button class="g2" id="logsDirExplore">...</button>
+          </div>
+
+          <fieldset id="window">
+            <legend>Ventana</legend>
+            <div class="input">
+              <select id="windowType" class="wide">
+                <option value="0">Pantalla completa</option>
+                <option value="1">Sin bordes</option>
+                <option value="2">Flotante</option>
+              </select>
+            </div>
+  
+            <div class="visGroup" data-groups="1,2">
+              <span>Tamaño de la ventana (ancho / alto)</span>
+              <div class="input grid">
+                <input class="g6" type="number" id="windowSizeX" placeholder="1280" maxlength="4">
+                <input class="g6" type="number" id="windowSizeY" placeholder="720" maxlength="4">
+              </div>
+            </div>
+
+            <div class="visGroup" data-groups="1">
+              <span>Posición de la ventana (izquierda / arriba)</span>
+              <div class="input grid">
+                <input class="g6" type="number" id="windowPosX" placeholder="0" maxlength="4">
+                <input class="g6" type="number" id="windowPosY" placeholder="0" maxlength="4">
+              </div>
+            </div>
+
+            <div class="visGroup" data-groups="1,2">
+              <input type="checkbox" id="alwaysOnTop">
+              <label for="alwaysOnTop">Siempre visible</label>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </form>
+
+    <button id="save">Guardar y reiniciar</button>
   </body>
 </html>
