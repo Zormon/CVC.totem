@@ -1,0 +1,29 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Sass Compile",
+            "type": "shell",
+            "command": "sass sass/totem.scss src/res/totem.css -s compressed; sass sass/config.scss src/res/config.css -s compressed",
+            "group": "build"
+        },
+        {
+            "label": "Build Windows 32",
+            "type": "shell",
+            "command": ".vscode/buildWin32.ps1",
+            "group": "build"
+        },
+        {
+            "label": "Build Windows 64",
+            "type": "shell",
+            "command": ".vscode/buildWin64.ps1",
+            "group": "build"
+        },
+		        {
+            "label": "Build Linux",
+            "type": "shell",
+            "command": ".vscode/BuildLinux64.ps1",
+            "group": "build"
+        }
+    ]
+}
